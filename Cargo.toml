@@ -1,5 +1,7 @@
 [package]
+description = "CLI tool to get the UTC datetime for a given natural language time/date description"
 edition = "2021"
+license = "ISC"
 name = "tu"
 version = "0.1.0"
 

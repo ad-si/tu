@@ -36,3 +36,14 @@ tasklite add "Buy bike" due:(tu 2 week)
 ```
 
 [TaskLite]: https://tasklite.org
+
+
+## Related
+
+- [`when`] - Timezone CLI tool.
+- [utcify.ad-si.com] - Web tool to convert local-time strings to UTC.
+- [`fuzzy-time`] - Haskell package for parsing fuzzy time strings.
+
+[`when`]: https://github.com/mitsuhiko/when
+[utcify.ad-si.com]: https://utcify.ad-si.com
+[`fuzzy-time`]: https://github.com/NorfairKing/fuzzy-time

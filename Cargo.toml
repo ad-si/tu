@@ -1,10 +1,22 @@
 [package]
-description = "CLI tool to get the UTC datetime for a given natural language time/date description"
-edition = "2021"
-license = "ISC"
 name = "tu"
 version = "0.1.0"
+description = "CLI tool to convert a natural language date/time string to UTC"
+repository = "https://github.com/ad-si/tu"
+categories = [
+  "command-line-utilities",
+  "text-processing",
+  "parser-implementations",
+]
+keywords = ["date", "time", "utc", "natural-language", "nlp", "cli"]
+license = "ISC"
+edition = "2021"
 
 [dependencies]
 chrono = "0.4.35"
-chrono-english = "0.1.7"
+
+# TODO: Use upstream version after this PR is merged:
+#       https://github.com/stevedonovan/chrono-english/pull/30
+[dependencies.chrono-english]
+git = "https://github.com/Nukesor/chrono-english.git"
+rev = "8e07035d56c89a437f3cb237f5ca1f39a7d43549"

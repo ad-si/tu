@@ -1,6 +1,6 @@
 [package]
 name = "tu"
-version = "0.1.0"
+version = "0.2.0"
 description = "CLI tool to convert a natural language date/time string to UTC"
 repository = "https://github.com/ad-si/tu"
 categories = [
@@ -8,7 +8,7 @@ categories = [
   "text-processing",
   "parser-implementations",
 ]
-keywords = ["date", "time", "utc", "natural-language", "nlp", "cli"]
+keywords = ["date", "time", "utc", "nlp", "cli"]
 license = "ISC"
 edition = "2021"
 

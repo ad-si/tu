@@ -14,9 +14,9 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.35"
+scanlex = "0.1.2"
 
-# TODO: Use upstream version after this PR is merged:
+# TODO: Use upstream crate `chrono-english` after this PR is merged:
 #       https://github.com/stevedonovan/chrono-english/pull/30
-[dependencies.chrono-english]
-git = "https://github.com/Nukesor/chrono-english.git"
-rev = "8e07035d56c89a437f3cb237f5ca1f39a7d43549"
+#       Included code in `src/chrono-english` is based on:
+#       https://github.com/Nukesor/chrono-english/tree/main"

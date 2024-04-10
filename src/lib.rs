@@ -1,5 +1,13 @@
 use chrono::prelude::{DateTime, Utc};
-use chrono_english::{parse_date_string, DateError, Dialect};
+
+mod chrono_english {
+  pub mod errors;
+  pub mod lib;
+  pub mod parser;
+  pub mod types;
+}
+
+use chrono_english::lib::{parse_date_string, DateError, Dialect};
 
 const DIALECT: Dialect = Dialect::Us;
 

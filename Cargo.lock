@@ -56,15 +56,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "chrono-english"
-version = "0.1.6"
-source = "git+https://github.com/Nukesor/chrono-english.git?rev=8e07035d56c89a437f3cb237f5ca1f39a7d43549#8e07035d56c89a437f3cb237f5ca1f39a7d43549"
-dependencies = [
- "chrono",
- "scanlex",
-]
-
-[[package]]
 name = "core-foundation-sys"
 version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -169,7 +160,7 @@ name = "tu"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "chrono-english",
+ "scanlex",
 ]
 
 [[package]]

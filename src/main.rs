@@ -25,8 +25,8 @@ fn main() {
             {s}{cmd} 9 week     -> {week9}\n\
             {s}{cmd} 1 month    -> {month1}\n\
             \n\
-            {s}{cmd} Wed, 14 Feb 2024 23:16:09 GMT -> 2024-02-14T23:16:09Z\n\
             {s}{cmd} 2024-04-10T13:31:46+04:00     -> 2024-04-10T09:31:46Z\n\
+            {s}{cmd} Wed, 14 Feb 2024 23:16:09 GMT -> 2024-02-14T23:16:09Z\n\
             "
     );
     std::process::exit(1);

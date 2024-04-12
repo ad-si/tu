@@ -21,6 +21,9 @@ Examples:
   tu 2 day      -> 2024-03-18T12:56:41.905455Z
   tu 9 week     -> 2024-05-18T12:56:41.905455Z
   tu 1 month    -> 2024-04-16T00:00:00Z
+
+  tu 2024-04-10T13:31:46+04:00     -> 2024-04-10T09:31:46Z
+  tu Wed, 14 Feb 2024 23:16:09 GMT -> 2024-02-14T23:16:09Z
 ```
 
 This is especially useful in combination with other tools like [TaskLite]:

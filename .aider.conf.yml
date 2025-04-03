@@ -1,0 +1,21 @@
+model: gemini/gemini-2.5-pro-exp-03-25
+
+auto-test: true
+test-cmd: cargo test
+
+# auto-lint: true
+# lint-cmd: cargo fmt
+
+auto-commits: false
+attribute-committer: false
+
+file:
+  - src/chrono_english/errors.rs
+  - src/chrono_english/lib.rs
+  - src/chrono_english/parser.rs
+  - src/chrono_english/types.rs
+  - src/lib.rs
+  - src/main.rs
+
+read:
+  - tests/integration.rs

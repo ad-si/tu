@@ -44,7 +44,8 @@ where
     dspec
       .to_date_time(now, tspec, dp.american)
       .or_err("bad date")?
-  } else {
+  }
+  else {
     // no date, time set for today's date
     tspec.to_date_time(now.date()).or_err("bad time")?
   };

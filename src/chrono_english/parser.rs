@@ -44,7 +44,8 @@ impl<'a> DateParser<'a> {
     let month_or_day = self.scanner.get_int::<u32>()?;
     let (day, month) = if self.american {
       (month_or_day, day_or_month)
-    } else {
+    }
+    else {
       (day_or_month, month_or_day)
     };
     Ok(if self.scanner.peek() == '/' {
@@ -54,14 +55,17 @@ impl<'a> DateParser<'a> {
         // pivot (1940, 2040)
         if y > 40 {
           1900 + y
-        } else {
+        }
+        else {
           2000 + y
         }
-      } else {
+      }
+      else {
         y
       };
       DateSpec::absolute(y, month, day)
-    } else {
+    }
+    else {
       DateSpec::FromName(ByName::from_day_month(day, month, self.direct))
     })
   }
@@ -71,7 +75,8 @@ impl<'a> DateParser<'a> {
 
     let sign = if t.is_char() && t.as_char().unwrap() == '-' {
       true
-    } else {
+    }
+    else {
       false
     };
     if sign {
@@ -87,7 +92,8 @@ impl<'a> DateParser<'a> {
       };
       if let Some(skip) = shortcut {
         return Ok(Some(DateSpec::skip(time_unit("day").unwrap(), skip)));
-      } else
+      }
+      else
       // maybe next or last?
       if let Some(d) = Direction::from_name(&name) {
         self.direct = d;
@@ -110,14 +116,16 @@ impl<'a> DateParser<'a> {
                 self.scanner.get_char()?; // eat ','
                 let year = self.scanner.get_int::<u32>()?;
                 DateSpec::absolute(year, month, day)
-              } else {
+              }
+              else {
                 // MONTH DAY is like DAY MONTH (tho no time!)
                 DateSpec::from_day_month(day, month, self.direct)
               }));
             }
           }
           Some(DateSpec::FromName(by_name))
-        } else {
+        }
+        else {
           return date_result("expected week day or month name");
         }
       }
@@ -136,25 +144,30 @@ impl<'a> DateParser<'a> {
               if let Ok(year) = self.scanner.get_int::<u32>() {
                 // 4 July 2017
                 Some(DateSpec::absolute(year, month, day))
-              } else {
+              }
+              else {
                 // 4 July
                 Some(DateSpec::from_day_month(day, month, self.direct))
               }
-            } else if let Some(u) = time_unit(&name) {
+            }
+            else if let Some(u) = time_unit(&name) {
               // '2 days'
               let mut n = n as i32;
               if sign {
                 n = -n;
-              } else {
+              }
+              else {
                 let t = self.scanner.get();
                 let got_ago = if let Some(name) = t.as_iden() {
                   if name == "ago" {
                     n = -n;
                     true
-                  } else {
+                  }
+                  else {
                     return date_result("only expected 'ago'");
                   }
-                } else {
+                }
+                else {
                   false
                 };
                 if !got_ago {
@@ -164,10 +177,12 @@ impl<'a> DateParser<'a> {
                 }
               }
               Some(DateSpec::skip(u, n))
-            } else if name == "am" || name == "pm" {
+            }
+            else if name == "am" || name == "pm" {
               self.maybe_time = Some((n, TimeKind::AmPm(name == "pm")));
               None
-            } else {
+            }
+            else {
               return date_result("expected month or time unit");
             }
           }
@@ -177,7 +192,8 @@ impl<'a> DateParser<'a> {
             ':' | '.' => {
               let kind = if ch == ':' {
                 TimeKind::Formal
-              } else {
+              }
+              else {
                 TimeKind::Informal
               };
               self.maybe_time = Some((n, kind));
@@ -202,11 +218,13 @@ impl<'a> DateParser<'a> {
           return date_result("expecting ':'");
         }
         self.scanner.get_int::<u32>()?
-      } else {
+      }
+      else {
         tnext = Some(t);
         0
       }
-    } else {
+    }
+    else {
       0
     };
     // we found seconds, look ahead
@@ -222,12 +240,14 @@ impl<'a> DateParser<'a> {
       let micros_f = frac.parse::<f64>().unwrap() * 1.0e6;
       tnext = self.scanner.next();
       micros_f as u32
-    } else {
+    }
+    else {
       0
     };
     if tnext.is_none() {
       Ok(TimeSpec::new(hour, min, sec, micros))
-    } else {
+    }
+    else {
       let tok = tnext.as_ref().unwrap();
       if let Some(ch) = tok.as_char() {
         let expecting_offset = match ch {
@@ -241,7 +261,8 @@ impl<'a> DateParser<'a> {
             // 02:00
             self.scanner.nextch();
             (hour_and_minute, self.scanner.get_int::<u32>()?)
-          } else {
+          }
+          else {
             // Parse 0230 statements.
             // -> 0230 / 100 -> 02
             // -> 0230 % 100 -> 30
@@ -256,22 +277,27 @@ impl<'a> DateParser<'a> {
           // Apply sign.
           if ch == '-' {
             -res
-          } else {
+          }
+          else {
             res
           }
-        } else {
+        }
+        else {
           0
         };
         Ok(TimeSpec::new_with_offset(hour, min, sec, offset, micros))
-      } else if let Some(id) = tok.as_iden() {
+      }
+      else if let Some(id) = tok.as_iden() {
         if id == "Z" {
           Ok(TimeSpec::new_with_offset(hour, min, sec, 0, micros))
-        } else {
+        }
+        else {
           // am or pm
           let hour = DateParser::am_pm(&id, hour)?;
           Ok(TimeSpec::new(hour, min, sec, micros))
         }
-      } else {
+      }
+      else {
         Ok(TimeSpec::new(hour, min, sec, micros))
       }
     }
@@ -282,7 +308,8 @@ impl<'a> DateParser<'a> {
     let hour = if let Some(t) = self.scanner.next() {
       let name = t.to_iden_result()?;
       DateParser::am_pm(&name, hour)?
-    } else {
+    }
+    else {
       hour
     };
     Ok(TimeSpec::new(hour, min, 0, 0))
@@ -291,7 +318,8 @@ impl<'a> DateParser<'a> {
   fn am_pm(name: &str, mut hour: u32) -> DateResult<u32> {
     if name == "pm" {
       hour += 12;
-    } else if name != "am" {
+    }
+    else if name != "am" {
       return date_result("expected am or pm");
     }
     Ok(hour)
@@ -321,7 +349,8 @@ impl<'a> DateParser<'a> {
         }
         TimeKind::Unknown => unreachable!(),
       }))
-    } else {
+    }
+    else {
       // no lookahead...
       if self.scanner.peek() == 'T' {
         self.scanner.nextch();

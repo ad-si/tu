@@ -69,7 +69,8 @@ fn next_last_direction<T: PartialOrd>(
     if direct == Direction::Last {
       res = Some(-1);
     }
-  } else if date < base && direct == Direction::Next {
+  }
+  else if date < base && direct == Direction::Next {
     res = Some(1)
   }
   res
@@ -79,9 +80,11 @@ impl ByName {
   pub fn from_name(s: &str, direct: Direction) -> Option<ByName> {
     Some(if let Some(wd) = week_day(s) {
       ByName::WeekDay(NamedDate::new(direct, wd))
-    } else if let Some(mn) = month_name(s) {
+    }
+    else if let Some(mn) = month_name(s) {
       ByName::MonthName(NamedDate::new(direct, mn))
-    } else {
+    }
+    else {
       return None;
     })
   }
@@ -240,7 +243,8 @@ impl Skip {
           .unwrap();
         if !ts.empty() {
           ts.to_date_time(date.date())?
-        } else {
+        }
+        else {
           date
         }
       }
@@ -253,7 +257,8 @@ impl Skip {
         // Which may run over to the next year and so forth
         let (year, month) = if month >= 0 {
           (year + month / 12, month % 12 + 1)
-        } else {
+        }
+        else {
           // TODO: What the heck is pmm?
           let pmm = 12 - month;
           (year - pmm / 12, 12 - pmm % 12 + 1)
@@ -394,7 +399,8 @@ impl TimeSpec {
         dt.timestamp() - offs + zoffset.fix().local_minus_utc() as i64;
       let nd = NaiveDateTime::from_timestamp(tstamp, 1000 * self.microsec);
       Some(DateTime::from_utc(nd, zoffset))
-    } else {
+    }
+    else {
       Some(dt)
     }
   }
@@ -456,7 +462,8 @@ pub fn time_unit(s: &str) -> Option<Interval> {
       "y" => "yea",
       _ => return None,
     }
-  } else {
+  }
+  else {
     &s[0..3]
   };
   Some(match name {

@@ -287,10 +287,17 @@ impl<'a> DateParser<'a> {
         if id == "Z" {
           Ok(TimeSpec::new_with_offset(hour, min, sec, 0, micros))
         }
-        else {
-          // am or pm
-          let hour = DateParser::am_pm(&id, hour)?;
-          Ok(TimeSpec::new(hour, min, sec, micros))
+        else { // id is not "Z"
+          // check if it's am or pm
+          let final_hour = if id == "am" || id == "pm" {
+              DateParser::am_pm(&id, hour)?
+          } else {
+              // It's some other identifier (like "at").
+              // Ignore it and use the original hour.
+              // The token `id` was already consumed by scanner.next() earlier.
+              hour
+          };
+          Ok(TimeSpec::new(final_hour, min, sec, micros))
         }
       }
       else {

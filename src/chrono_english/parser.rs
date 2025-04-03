@@ -140,18 +140,14 @@ impl<'a> DateParser<'a> {
           Token::Iden(ref name) => {
             let day = n;
             let name = name.to_lowercase();
+            // Case: NUMBER IDEN (e.g., "14 december", "2 days")
             if let Some(month) = month_name(&name) {
-              if let Ok(year) = self.scanner.get_int::<u32>() {
-                // 4 July 2017
-                Some(DateSpec::absolute(year, month, day))
-              }
-              else {
-                // 4 July
-                Some(DateSpec::from_day_month(day, month, self.direct))
-              }
-            }
-            else if let Some(u) = time_unit(&name) {
-              // '2 days'
+              // Parsed DAY MONTH (e.g., "14 december").
+              // Stop parsing the date part here. Let the main loop
+              // handle subsequent tokens (like time "11:20" or year).
+              Some(DateSpec::from_day_month(day, month, self.direct))
+            } else if let Some(u) = time_unit(&name) {
+              // Parsed NUMBER UNIT (e.g., "2 days")
               let mut n = n as i32;
               if sign {
                 n = -n;

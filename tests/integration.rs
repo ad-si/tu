@@ -92,6 +92,11 @@ fn test_parse_date_string() {
       dt!(0, 1, 1),
       (2024, 4, 10, 9, 31, 46),
     ),
+    (
+      "14 december 11:20",
+      dt!(2025, 1, 1),
+      (2025, 12, 14, 11, 20, 0),
+    ),
   ];
   let max_test_len = tests
     .clone()

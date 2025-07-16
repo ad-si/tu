@@ -1,6 +1,6 @@
 use chrono::{
   prelude::{NaiveDate, NaiveDateTime},
-  DateTime, TimeZone, Utc,
+  DateTime, Datelike, TimeZone, Utc,
 };
 use tu::*;
 
@@ -103,6 +103,30 @@ fn test_parse_date_string() {
       dt!(2025, 1, 1),
       (2025, 12, 14, 11, 20, 0),
     ),
+    (
+      // Unix timestamp - epoch
+      "0",
+      dt!(2024, 1, 1),
+      (1970, 1, 1, 0, 0, 0),
+    ),
+    (
+      // Unix timestamp - Y2K
+      "946684800",
+      dt!(2024, 1, 1),
+      (2000, 1, 1, 0, 0, 0),
+    ),
+    (
+      // Unix timestamp - Common timestamp
+      "1000000000",
+      dt!(2024, 1, 1),
+      (2001, 9, 9, 1, 46, 40),
+    ),
+    (
+      // Unix timestamp - Recent timestamp
+      "1740599117",
+      dt!(2024, 1, 1),
+      (2025, 2, 26, 19, 45, 17),
+    ),
   ];
   let max_test_len = tests
     .clone()
@@ -113,5 +137,52 @@ fn test_parse_date_string() {
 
   for (input, now, expected) in tests.iter() {
     execute_test(max_test_len, input, *now, *expected);
+  }
+}
+
+#[test]
+fn test_unix_timestamp_edge_cases() {
+  let now = Utc.from_utc_datetime(&tup_to_naive_date(dt!(2024, 1, 1)));
+
+  // Test valid Unix timestamps
+  let valid_cases = [
+    ("0", (1970, 1, 1, 0, 0, 0)),
+    ("1", (1970, 1, 1, 0, 0, 1)),
+    ("1740599117", (2025, 2, 26, 19, 45, 17)),
+    ("946684800", (2000, 1, 1, 0, 0, 0)),
+    ("1000000000", (2001, 9, 9, 1, 46, 40)),
+  ];
+
+  for (input, expected) in valid_cases.iter() {
+    let date_args = vec![input.to_string()];
+    let result = parse_date_args(&date_args, now).unwrap();
+    let expected_date = DateTime::<Utc>::from_naive_utc_and_offset(
+      tup_to_naive_date(*expected),
+      Utc,
+    );
+    assert_eq!(
+      result, expected_date,
+      "Failed for Unix timestamp: {}",
+      input
+    );
+  }
+
+  // Test that mixed alphanumeric strings don't get parsed as Unix timestamps
+  let mixed_cases = ["123abc", "abc123", "12.34", "1234-56-78"];
+
+  for input in mixed_cases.iter() {
+    let date_args = vec![input.to_string()];
+    // These should either parse as natural language or fail, but not as Unix timestamps
+    let result = parse_date_args(&date_args, now);
+    if let Ok(parsed_date) = result {
+      // If it parses successfully, it should not be interpreted as a Unix timestamp
+      // (i.e., it shouldn't be from 1970)
+      assert_ne!(
+        parsed_date.year(),
+        1970,
+        "Mixed string '{}' was incorrectly parsed as Unix timestamp",
+        input
+      );
+    }
   }
 }

@@ -59,6 +59,15 @@ pub fn parse_date_args(
     .trim(),
   );
 
+  // Check if it's a Unix timestamp (all digits)
+  if args_combined.chars().all(|c| c.is_ascii_digit()) {
+    if let Ok(timestamp) = args_combined.parse::<i64>() {
+      if let Some(datetime) = DateTime::from_timestamp(timestamp, 0) {
+        return Ok(datetime);
+      }
+    }
+  }
+
   DateTime::parse_from_rfc2822(&args_combined)
     .or_else(|_| DateTime::parse_from_rfc3339(&args_combined))
     .map(|datetime| datetime.with_timezone(&Utc))

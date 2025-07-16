@@ -62,6 +62,19 @@ pub fn parse_date_args(
   // Check if it's a Unix timestamp (all digits)
   if args_combined.chars().all(|c| c.is_ascii_digit()) {
     if let Ok(timestamp) = args_combined.parse::<i64>() {
+      // Try as millisecond timestamp first (if it's a reasonable size)
+      // Millisecond timestamps are typically 13 digits long
+      // We use a heuristic: if the timestamp has exactly 13 digits and dividing by 1000 
+      // gives a reasonable Unix timestamp (after 2001), treat it as milliseconds
+      if args_combined.len() == 13 && timestamp / 1000 >= 1_000_000_000 {
+        let seconds = timestamp / 1000;
+        let nanoseconds = (timestamp % 1000) * 1_000_000;
+        if let Some(datetime) = DateTime::from_timestamp(seconds, nanoseconds as u32) {
+          return Ok(datetime);
+        }
+      }
+      
+      // Fall back to regular second-based timestamp
       if let Some(datetime) = DateTime::from_timestamp(timestamp, 0) {
         return Ok(datetime);
       }

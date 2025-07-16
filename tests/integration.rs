@@ -11,6 +11,13 @@ fn tup_to_naive_date(t: (i32, u32, u32, u32, u32, u32)) -> NaiveDateTime {
     .unwrap()
 }
 
+fn tup_to_naive_date_with_ms(t: (i32, u32, u32, u32, u32, u32, u32)) -> NaiveDateTime {
+  NaiveDate::from_ymd_opt(t.0, t.1, t.2)
+    .unwrap()
+    .and_hms_milli_opt(t.3, t.4, t.5, t.6)
+    .unwrap()
+}
+
 type DateTimeTup = (i32, u32, u32, u32, u32, u32);
 
 // Macro to create DateTimeTup with only 3 values
@@ -143,13 +150,22 @@ fn test_parse_date_string() {
 fn test_unix_timestamp_edge_cases() {
   let now = Utc.from_utc_datetime(&tup_to_naive_date(dt!(2024, 1, 1)));
 
-  // Test valid Unix timestamps
+  // Test valid Unix timestamps (seconds)
   let valid_cases = [
     ("0", (1970, 1, 1, 0, 0, 0)),
     ("1", (1970, 1, 1, 0, 0, 1)),
     ("1740599117", (2025, 2, 26, 19, 45, 17)),
     ("946684800", (2000, 1, 1, 0, 0, 0)),
     ("1000000000", (2001, 9, 9, 1, 46, 40)),
+  ];
+  
+  // Test valid Unix timestamps with milliseconds
+  let valid_ms_cases = [
+    ("1000000000000", (2001, 9, 9, 1, 46, 40, 0)),
+    ("1000000000500", (2001, 9, 9, 1, 46, 40, 500)),
+    ("1740599117000", (2025, 2, 26, 19, 45, 17, 0)),
+    ("1740599117123", (2025, 2, 26, 19, 45, 17, 123)),
+    ("1740599117999", (2025, 2, 26, 19, 45, 17, 999)),
   ];
 
   for (input, expected) in valid_cases.iter() {
@@ -161,8 +177,20 @@ fn test_unix_timestamp_edge_cases() {
     );
     assert_eq!(
       result, expected_date,
-      "Failed for Unix timestamp: {}",
-      input
+      "Failed for Unix timestamp: {input}"
+    );
+  }
+  
+  for (input, expected) in valid_ms_cases.iter() {
+    let date_args = vec![input.to_string()];
+    let result = parse_date_args(&date_args, now).unwrap();
+    let expected_date = DateTime::<Utc>::from_naive_utc_and_offset(
+      tup_to_naive_date_with_ms(*expected),
+      Utc,
+    );
+    assert_eq!(
+      result, expected_date,
+      "Failed for Unix timestamp with milliseconds: {input}"
     );
   }
 

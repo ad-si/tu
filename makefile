@@ -3,8 +3,13 @@ help: makefile
 	@tail -n +4 makefile | grep ".PHONY"
 
 
+.PHONY: format
+format:
+	cargo clippy --fix --allow-dirty
+
+
 .PHONY: test
-test:
+test: format
 	cargo test -- --show-output
 
 

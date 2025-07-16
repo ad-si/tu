@@ -129,7 +129,7 @@ impl ByName {
         let this_day = base.weekday().num_days_from_monday() as i64;
         let that_day = nd.unit as i64;
         let diff_days = that_day - this_day;
-        let mut date = add_days(base.clone(), diff_days)?;
+        let mut date = add_days(base, diff_days)?;
         if let Some(correct) = next_last_direction(&date, &base, nd.direct) {
           date = add_days(date, 7 * correct as i64)?;
         }

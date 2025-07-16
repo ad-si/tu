@@ -34,17 +34,16 @@ fn execute_test(
   let date = parse_date_args(&date_args, now_utc) //
     .unwrap_or_else(|e| {
       panic!(
-        "\nERROR:\nFailed for input: \"{}\"\n\n\
-                        MESSAGE:\n{}\n\n",
-        input, e
+        "\nERROR:\nFailed for input: \"{input}\"\n\n\
+                        MESSAGE:\n{e}\n\n"
       )
     });
   let expected_date = DateTime::<Utc>::from_naive_utc_and_offset(
     tup_to_naive_date(expected),
     Utc,
   );
-  assert_eq!(date, expected_date, "Failed for input: {}", input);
-  let padded_input = format!("{:<width$}", input, width = max_test_len);
+  assert_eq!(date, expected_date, "Failed for input: {input}");
+  let padded_input = format!("{input:<max_test_len$}");
 
   println!("{}  ->  {}", padded_input, to_iso(date));
 }
@@ -180,8 +179,7 @@ fn test_unix_timestamp_edge_cases() {
       assert_ne!(
         parsed_date.year(),
         1970,
-        "Mixed string '{}' was incorrectly parsed as Unix timestamp",
-        input
+        "Mixed string '{input}' was incorrectly parsed as Unix timestamp"
       );
     }
   }

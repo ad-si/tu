@@ -24,7 +24,7 @@ pub fn date_error(msg: impl ToString) -> DateError {
 }
 
 pub fn date_result<T>(msg: &str) -> DateResult<T> {
-  Err(date_error(msg).into())
+  Err(date_error(msg))
 }
 
 impl From<ScanError> for DateError {

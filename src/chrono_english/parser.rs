@@ -73,12 +73,7 @@ impl<'a> DateParser<'a> {
   fn parse_date(&mut self) -> DateResult<Option<DateSpec>> {
     let mut t = self.scanner.next().or_err("empty date string")?;
 
-    let sign = if t.is_char() && t.as_char().unwrap() == '-' {
-      true
-    }
-    else {
-      false
-    };
+    let sign = t.is_char() && t.as_char().unwrap() == '-';
     if sign {
       t = self.scanner.next().or_err("nothing after '-'")?;
     }
@@ -95,7 +90,7 @@ impl<'a> DateParser<'a> {
       }
       else
       // maybe next or last?
-      if let Some(d) = Direction::from_name(&name) {
+      if let Some(d) = Direction::from_name(name) {
         self.direct = d;
       }
     }
@@ -195,12 +190,12 @@ impl<'a> DateParser<'a> {
               self.maybe_time = Some((n, kind));
               None
             }
-            _ => return date_result(&format!("unexpected char {:?}", ch)),
+            _ => return date_result(&format!("unexpected char {ch:?}")),
           },
-          _ => return date_result(&format!("unexpected token {:?}", t)),
+          _ => return date_result(&format!("unexpected token {t:?}")),
         }
       }
-      _ => return date_result(&format!("not expected token {:?}", t)),
+      _ => return date_result(&format!("not expected token {t:?}")),
     })
   }
 
@@ -290,7 +285,7 @@ impl<'a> DateParser<'a> {
         else { // id is not "Z"
           // check if it's am or pm
           let final_hour = if id == "am" || id == "pm" {
-              DateParser::am_pm(&id, hour)?
+              DateParser::am_pm(id, hour)?
           } else {
               // It's some other identifier (like "at").
               // Ignore it and use the original hour.
@@ -341,7 +336,7 @@ impl<'a> DateParser<'a> {
         kind = match self.scanner.get_char()? {
           ':' => TimeKind::Formal,
           '.' => TimeKind::Informal,
-          ch => return date_result(&format!("expected : or ., not {}", ch)),
+          ch => return date_result(&format!("expected : or ., not {ch}")),
         };
       }
       Ok(Some(match kind {
@@ -368,10 +363,10 @@ impl<'a> DateParser<'a> {
         Token::Char(ch) => match ch {
           ':' => self.formal_time(hour)?,
           '.' => self.informal_time(hour)?,
-          ch => return date_result(&format!("unexpected char {:?}", ch)),
+          ch => return date_result(&format!("unexpected char {ch:?}")),
         },
         Token::Iden(name) => DateParser::hour_time(&name, hour)?,
-        t => return date_result(&format!("unexpected token {:?}", t)),
+        t => return date_result(&format!("unexpected token {t:?}")),
       }))
     }
   }

@@ -173,7 +173,26 @@ impl<'a> DateParser<'a> {
             }
             else if name == "am" || name == "pm" {
               self.maybe_time = Some((n_int, TimeKind::AmPm(name == "pm")));
-              None
+              // Continue parsing to look for date information after time
+              let next_token = self.scanner.get();
+              if next_token.finished() {
+                None
+              } else if let Some(next_name) = next_token.as_iden() {
+                let next_name = next_name.to_lowercase();
+                // Check for date shortcuts like "tomorrow", "today", etc.
+                let shortcut = match next_name.as_str() {
+                  "now" => Some(0),
+                  "today" => Some(0),
+                  "yesterday" => Some(-1),
+                  "tomorrow" => Some(1),
+                  _ => None,
+                };
+                if let Some(skip) = shortcut {
+                  Some(DateSpec::skip(time_unit("day").unwrap(), skip as f64))
+                } else { ByName::from_name(&next_name, self.direct).map(DateSpec::FromName) }
+              } else {
+                None
+              }
             }
             else {
               return date_result("expected month or time unit");

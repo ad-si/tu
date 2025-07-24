@@ -48,16 +48,20 @@ pub fn parse_date_args(
   now: DateTime<Utc>,
 ) -> Result<DateTime<Utc>, DateError> {
   // Remove "in" or "at" from the beginning
-  let args_combined = append_min_if_only_hour(
-    match args.iter().map(String::as_ref).collect::<Vec<&str>>()[..] {
-      ["in", "a", ..] => format!("1 {}", args[2..].join(" ")),
-      ["in", "an", ..] => format!("1 {}", args[2..].join(" ")),
-      ["in", ..] => args[1..].join(" "),
-      ["at", ..] => args[1..].join(" "),
-      _ => args.join(" "),
+  let args_combined = append_min_if_only_hour({
+    let combined = args.join(" ");
+    if let Some(stripped) = combined.strip_prefix("in a ") {
+      format!("1 {stripped}")
+    } else if let Some(stripped) = combined.strip_prefix("in an ") {
+      format!("1 {stripped}")
+    } else if let Some(stripped) = combined.strip_prefix("in ") {
+      stripped.to_string()
+    } else if let Some(stripped) = combined.strip_prefix("at ") {
+      stripped.to_string()
+    } else {
+      combined
     }
-    .trim(),
-  );
+  }.trim());
 
   // Check if it's a Unix timestamp (all digits)
   if args_combined.chars().all(|c| c.is_ascii_digit()) {

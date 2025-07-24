@@ -86,7 +86,7 @@ impl<'a> DateParser<'a> {
         _ => None,
       };
       if let Some(skip) = shortcut {
-        return Ok(Some(DateSpec::skip(time_unit("day").unwrap(), skip)));
+        return Ok(Some(DateSpec::skip(time_unit("day").unwrap(), skip as f64)));
       }
       else
       // maybe next or last?
@@ -125,15 +125,17 @@ impl<'a> DateParser<'a> {
         }
       }
       Token::Int(_) => {
-        let n = t.to_int_result::<u32>()?;
+        let n_int = t.to_int_result::<u32>()?;
+        let mut n_float = n_int as f64;
+        
         let t = self.scanner.get();
         if t.finished() {
           // must be a year...
-          return Ok(Some(DateSpec::absolute(n, 1, 1)));
+          return Ok(Some(DateSpec::absolute(n_int, 1, 1)));
         }
         match t {
           Token::Iden(ref name) => {
-            let day = n;
+            let day = n_int;
             let name = name.to_lowercase();
             // Case: NUMBER IDEN (e.g., "14 december", "2 days")
             if let Some(month) = month_name(&name) {
@@ -142,8 +144,8 @@ impl<'a> DateParser<'a> {
               // handle subsequent tokens (like time "11:20" or year).
               Some(DateSpec::from_day_month(day, month, self.direct))
             } else if let Some(u) = time_unit(&name) {
-              // Parsed NUMBER UNIT (e.g., "2 days")
-              let mut n = n as i32;
+              // Parsed NUMBER UNIT (e.g., "2 days", "1.5 hours")
+              let mut n = n_float;
               if sign {
                 n = -n;
               }
@@ -170,7 +172,7 @@ impl<'a> DateParser<'a> {
               Some(DateSpec::skip(u, n))
             }
             else if name == "am" || name == "pm" {
-              self.maybe_time = Some((n, TimeKind::AmPm(name == "pm")));
+              self.maybe_time = Some((n_int, TimeKind::AmPm(name == "pm")));
               None
             }
             else {
@@ -178,21 +180,20 @@ impl<'a> DateParser<'a> {
             }
           }
           Token::Char(ch) => match ch {
-            '-' => Some(self.iso_date(n)?),
-            '/' => Some(self.informal_date(n)?),
+            '-' => Some(self.iso_date(n_int)?),
+            '/' => Some(self.informal_date(n_int)?),
             ':' => {
-              self.maybe_time = Some((n, TimeKind::Formal));
+              self.maybe_time = Some((n_int, TimeKind::Formal));
               None
             }
             '.' => {
-              // Check if this is a date with dot (like "15. Jun") or time (like "11.20")
-              // Look ahead to see if next token is an identifier (month name)
+              // Check if this is a decimal number, date with dot (like "15. Jun"), or time (like "11.20")
               let next_token = self.scanner.get();
               if let Token::Iden(ref name) = next_token {
                 // This looks like "15. Jun" format
                 let name = name.to_lowercase();
                 if let Some(month) = month_name(&name) {
-                  let day = n;
+                  let day = n_int;
                   // Check if there's a year following
                   let next_token = self.scanner.get();
                   if next_token.is_integer() {
@@ -206,9 +207,32 @@ impl<'a> DateParser<'a> {
                   return date_result("expected month name after day with dot");
                 }
               } else if next_token.is_integer() {
-                // This is time format like "11.20"
-                self.maybe_time = Some((n, TimeKind::Informal));
-                None
+                // This could be a decimal number like "1.5" or time like "11.20"
+                let decimal_part = next_token.to_int_result::<u32>()? as f64;
+                let decimal_places = decimal_part.to_string().len() as f64;
+                n_float = (n_int as f64) + decimal_part / (10.0_f64.powf(decimal_places));
+                
+                // Continue parsing to see if this is followed by a time unit
+                let next_token = self.scanner.get();
+                if let Token::Iden(ref name) = next_token {
+                  let name = name.to_lowercase();
+                  if let Some(u) = time_unit(&name) {
+                    // This is a decimal duration like "1.5 hours"
+                    let mut n = n_float;
+                    if sign {
+                      n = -n;
+                    }
+                    Some(DateSpec::skip(u, n))
+                  } else {
+                    // Not a time unit, treat as informal time like "11.20"
+                    self.maybe_time = Some((n_int, TimeKind::Informal));
+                    None
+                  }
+                } else {
+                  // Not followed by identifier, treat as informal time
+                  self.maybe_time = Some((n_int, TimeKind::Informal));
+                  None
+                }
               } else {
                 return date_result("unexpected token after dot");
               }

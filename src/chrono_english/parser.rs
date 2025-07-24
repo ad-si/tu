@@ -180,15 +180,38 @@ impl<'a> DateParser<'a> {
           Token::Char(ch) => match ch {
             '-' => Some(self.iso_date(n)?),
             '/' => Some(self.informal_date(n)?),
-            ':' | '.' => {
-              let kind = if ch == ':' {
-                TimeKind::Formal
-              }
-              else {
-                TimeKind::Informal
-              };
-              self.maybe_time = Some((n, kind));
+            ':' => {
+              self.maybe_time = Some((n, TimeKind::Formal));
               None
+            }
+            '.' => {
+              // Check if this is a date with dot (like "15. Jun") or time (like "11.20")
+              // Look ahead to see if next token is an identifier (month name)
+              let next_token = self.scanner.get();
+              if let Token::Iden(ref name) = next_token {
+                // This looks like "15. Jun" format
+                let name = name.to_lowercase();
+                if let Some(month) = month_name(&name) {
+                  let day = n;
+                  // Check if there's a year following
+                  let next_token = self.scanner.get();
+                  if next_token.is_integer() {
+                    let year = next_token.to_int_result::<u32>()?;
+                    Some(DateSpec::absolute(year, month, day))
+                  } else {
+                    // No year found, just use day/month
+                    Some(DateSpec::from_day_month(day, month, self.direct))
+                  }
+                } else {
+                  return date_result("expected month name after day with dot");
+                }
+              } else if next_token.is_integer() {
+                // This is time format like "11.20"
+                self.maybe_time = Some((n, TimeKind::Informal));
+                None
+              } else {
+                return date_result("unexpected token after dot");
+              }
             }
             _ => return date_result(&format!("unexpected char {ch:?}")),
           },
@@ -353,9 +376,19 @@ impl<'a> DateParser<'a> {
       if self.scanner.peek() == 'T' {
         self.scanner.nextch();
       }
-      let t = self.scanner.get();
+      let mut t = self.scanner.get();
       if t.finished() {
         return Ok(None);
+      }
+
+      // Skip "at" connector word if present
+      if let Some(name) = t.as_iden() {
+        if name == "at" {
+          t = self.scanner.get();
+          if t.finished() {
+            return Ok(None);
+          }
+        }
       }
 
       let hour = t.to_int_result::<u32>()?;

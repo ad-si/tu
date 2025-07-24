@@ -11,7 +11,9 @@ fn tup_to_naive_date(t: (i32, u32, u32, u32, u32, u32)) -> NaiveDateTime {
     .unwrap()
 }
 
-fn tup_to_naive_date_with_ms(t: (i32, u32, u32, u32, u32, u32, u32)) -> NaiveDateTime {
+fn tup_to_naive_date_with_ms(
+  t: (i32, u32, u32, u32, u32, u32, u32),
+) -> NaiveDateTime {
   NaiveDate::from_ymd_opt(t.0, t.1, t.2)
     .unwrap()
     .and_hms_milli_opt(t.3, t.4, t.5, t.6)
@@ -133,6 +135,18 @@ fn test_parse_date_string() {
       dt!(2024, 1, 1),
       (2025, 2, 26, 19, 45, 17),
     ),
+    (
+      // Date with dot format
+      "15. Jun 2025 at 14:19:13",
+      dt!(2024, 1, 1),
+      (2025, 6, 15, 14, 19, 13),
+    ),
+    (
+      // Date with dot format all lowercase
+      "7. dec 1922 at 23:41:55",
+      dt!(2024, 1, 1),
+      (1922, 12, 7, 23, 41, 55),
+    ),
   ];
   let max_test_len = tests
     .clone()
@@ -158,7 +172,7 @@ fn test_unix_timestamp_edge_cases() {
     ("946684800", (2000, 1, 1, 0, 0, 0)),
     ("1000000000", (2001, 9, 9, 1, 46, 40)),
   ];
-  
+
   // Test valid Unix timestamps with milliseconds
   let valid_ms_cases = [
     ("1000000000000", (2001, 9, 9, 1, 46, 40, 0)),
@@ -175,12 +189,9 @@ fn test_unix_timestamp_edge_cases() {
       tup_to_naive_date(*expected),
       Utc,
     );
-    assert_eq!(
-      result, expected_date,
-      "Failed for Unix timestamp: {input}"
-    );
+    assert_eq!(result, expected_date, "Failed for Unix timestamp: {input}");
   }
-  
+
   for (input, expected) in valid_ms_cases.iter() {
     let date_args = vec![input.to_string()];
     let result = parse_date_args(&date_args, now).unwrap();

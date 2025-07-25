@@ -34,6 +34,16 @@ impl<'a> DateParser<'a> {
     self
   }
 
+  fn date_shortcut_offset(name: &str) -> Option<i32> {
+    match name {
+      "now" => Some(0),
+      "today" | "tdy" => Some(0),
+      "yesterday" | "yday" | "ytd" => Some(-1),
+      "tomorrow" | "tmr" | "tmrw" => Some(1),
+      _ => None,
+    }
+  }
+
   fn iso_date(&mut self, year: u32) -> DateResult<DateSpec> {
     let month = self.scanner.get_int::<u32>()?;
     self.scanner.get_ch_matching(&['-'])?;
@@ -105,17 +115,12 @@ impl<'a> DateParser<'a> {
       t = self.scanner.next().or_err("nothing after '-'")?;
     }
     if let Some(name) = t.as_iden() {
-      let shortcut = match name {
-        "now" => Some(0),
-        "today" => Some(0),
-        "yesterday" => Some(-1),
-        "tomorrow" => Some(1),
-        _ => None,
-      };
-      if let Some(skip) = shortcut {
-        return Ok(Some(DateSpec::skip(time_unit("day").unwrap(), skip as f64)));
-      }
-      else
+      if let Some(skip) = Self::date_shortcut_offset(name) {
+        return Ok(Some(DateSpec::skip(
+          time_unit("day").unwrap(),
+          skip as f64,
+        )));
+      } else
       // maybe next or last?
       if let Some(d) = Direction::from_name(name) {
         self.direct = d;
@@ -274,14 +279,7 @@ impl<'a> DateParser<'a> {
               } else if let Some(next_name) = next_token.as_iden() {
                 let next_name = next_name.to_lowercase();
                 // Check for date shortcuts like "tomorrow", "today", etc.
-                let shortcut = match next_name.as_str() {
-                  "now" => Some(0),
-                  "today" => Some(0),
-                  "yesterday" => Some(-1),
-                  "tomorrow" => Some(1),
-                  _ => None,
-                };
-                if let Some(skip) = shortcut {
+                if let Some(skip) = Self::date_shortcut_offset(&next_name) {
                   Some(DateSpec::skip(time_unit("day").unwrap(), skip as f64))
                 } else { ByName::from_name(&next_name, self.direct).map(DateSpec::FromName) }
               } else {

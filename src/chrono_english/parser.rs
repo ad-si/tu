@@ -9,6 +9,7 @@ enum TimeKind {
   Informal,
   AmPm(bool),
   Unknown,
+  PreParsed(u32), // minute component for pre-parsed time (hour stored separately)
 }
 
 pub struct DateParser<'a> {
@@ -37,6 +38,32 @@ impl<'a> DateParser<'a> {
     let month = self.scanner.get_int::<u32>()?;
     self.scanner.get_ch_matching(&['-'])?;
     let day = self.scanner.get_int::<u32>()?;
+    
+    // Check if there's time information following the date (e.g., "2024-04-10 7:12 PM UTC")
+    let next_token = self.scanner.get();
+    if next_token.is_integer() {
+      let hour = next_token.to_int_result::<u32>()?;
+      // Expect colon for minutes
+      self.scanner.get_ch_matching(&[':'])?;
+      let min = self.scanner.get_int::<u32>()?;
+      // Get AM/PM
+      let am_pm_token = self.scanner.get();
+      if let Some(am_pm) = am_pm_token.as_iden() {
+        let am_pm_lower = am_pm.to_lowercase();
+        if am_pm_lower == "am" || am_pm_lower == "pm" {
+          let final_hour = if am_pm_lower == "pm" && hour != 12 {
+            hour + 12
+          } else if am_pm_lower == "am" && hour == 12 {
+            0
+          } else {
+            hour
+          };
+          // Store the parsed time with minutes using the PreParsed variant
+          self.maybe_time = Some((final_hour, TimeKind::PreParsed(min)));
+        }
+      }
+    }
+    
     Ok(DateSpec::absolute(year, month, day))
   }
 
@@ -110,11 +137,78 @@ impl<'a> DateParser<'a> {
               return Ok(Some(if self.scanner.peek() == ',' {
                 self.scanner.get_char()?; // eat ','
                 let year = self.scanner.get_int::<u32>()?;
+                // Check if there's another comma followed by time (e.g., "Apr 10, 2024, 7:12 PM UTC")
+                if self.scanner.peek() == ',' {
+                  self.scanner.get_char()?; // eat second ','
+                  // Parse the time portion
+                  let time_token = self.scanner.get();
+                  if time_token.is_integer() {
+                    let hour = time_token.to_int_result::<u32>()?;
+                    // Expect colon for minutes
+                    self.scanner.get_ch_matching(&[':'])?;
+                    let min = self.scanner.get_int::<u32>()?;
+                    // Get AM/PM
+                    let am_pm_token = self.scanner.get();
+                    if let Some(am_pm) = am_pm_token.as_iden() {
+                      let am_pm_lower = am_pm.to_lowercase();
+                      if am_pm_lower == "am" || am_pm_lower == "pm" {
+                        let final_hour = if am_pm_lower == "pm" && hour != 12 {
+                          hour + 12
+                        } else if am_pm_lower == "am" && hour == 12 {
+                          0
+                        } else {
+                          hour
+                        };
+                        // Store the parsed time with minutes using the PreParsed variant
+                        self.maybe_time = Some((final_hour, TimeKind::PreParsed(min)));
+                        return Ok(Some(DateSpec::absolute(year, month, day)));
+                      }
+                    }
+                  }
+                }
                 DateSpec::absolute(year, month, day)
-              }
-              else {
-                // MONTH DAY is like DAY MONTH (tho no time!)
-                DateSpec::from_day_month(day, month, self.direct)
+              } else {
+                // Check for "Month Day Year, Time" pattern (no comma before year)
+                let next_token = self.scanner.get();
+                if next_token.is_integer() {
+                  let year = next_token.to_int_result::<u32>()?;
+                  // Check if there's a comma followed by time (e.g., "Apr 10 2024, 7:12 PM UTC")
+                  // or just time without comma (e.g., "Apr 10 2024 7:12 PM UTC")
+                  let has_comma = self.scanner.peek() == ',';
+                  if has_comma {
+                    self.scanner.get_char()?; // eat ','
+                  }
+                  
+                  // Check if next token is a time (with or without comma)
+                  let time_token = self.scanner.get();
+                  if time_token.is_integer() {
+                    let hour = time_token.to_int_result::<u32>()?;
+                    // Expect colon for minutes
+                    self.scanner.get_ch_matching(&[':'])?;
+                    let min = self.scanner.get_int::<u32>()?;
+                    // Get AM/PM
+                    let am_pm_token = self.scanner.get();
+                    if let Some(am_pm) = am_pm_token.as_iden() {
+                      let am_pm_lower = am_pm.to_lowercase();
+                      if am_pm_lower == "am" || am_pm_lower == "pm" {
+                        let final_hour = if am_pm_lower == "pm" && hour != 12 {
+                          hour + 12
+                        } else if am_pm_lower == "am" && hour == 12 {
+                          0
+                        } else {
+                          hour
+                        };
+                        // Store the parsed time with minutes using the PreParsed variant
+                        self.maybe_time = Some((final_hour, TimeKind::PreParsed(min)));
+                        return Ok(Some(DateSpec::absolute(year, month, day)));
+                      }
+                    }
+                  }
+                  DateSpec::absolute(year, month, day)
+                } else {
+                  // MONTH DAY is like DAY MONTH (tho no time!)
+                  DateSpec::from_day_month(day, month, self.direct)
+                }
               }));
             }
           }
@@ -410,6 +504,10 @@ impl<'a> DateParser<'a> {
         TimeKind::Informal => self.informal_time(hour)?,
         TimeKind::AmPm(is_pm) => {
           DateParser::hour_time(if is_pm { "pm" } else { "am" }, hour)?
+        }
+        TimeKind::PreParsed(min) => {
+          // For pre-parsed time, we already have hour and minute
+          TimeSpec::new(hour, min, 0, 0)
         }
         TimeKind::Unknown => unreachable!(),
       }))

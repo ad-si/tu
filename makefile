@@ -6,6 +6,9 @@ help: makefile
 .PHONY: format
 format:
 	cargo clippy --fix --allow-dirty
+	cargo fmt
+	find . -type f -name '*.rs' \
+		-exec sed -i -E 's/^([[:space:]]*)\} else/\1}\n\1else/g' {} +
 
 
 .PHONY: test

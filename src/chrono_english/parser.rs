@@ -44,6 +44,43 @@ impl<'a> DateParser<'a> {
     }
   }
 
+  fn timezone_abbrev_offset(name: &str) -> Option<i64> {
+    use chrono::{DateTime, TimeZone as _};
+    use chrono_tz::{OffsetName, TZ_VARIANTS};
+    use std::collections::HashMap;
+    use std::sync::OnceLock;
+
+    // Built once from chrono-tz's full timezone database by iterating every
+    // IANA zone at a NH-winter and NH-summer reference time (covering both
+    // hemispheres and standard/DST pairs alike).  TZ_VARIANTS is in alphabetical
+    // IANA-name order, so first-found wins for ambiguous abbreviations.
+    static ABBREV_MAP: OnceLock<HashMap<String, i64>> = OnceLock::new();
+
+    let map = ABBREV_MAP.get_or_init(|| {
+      let winter = DateTime::from_timestamp(1_577_836_800, 0)
+        .unwrap()
+        .naive_utc(); // 2020-01-01
+      let summer = DateTime::from_timestamp(1_593_561_600, 0)
+        .unwrap()
+        .naive_utc(); // 2020-07-01
+
+      let mut m: HashMap<String, i64> = HashMap::new();
+      for &tz in TZ_VARIANTS.iter() {
+        for &dt in &[winter, summer] {
+          let offset = tz.offset_from_utc_datetime(&dt);
+          if let Some(abbrev) = offset.abbreviation() {
+            m.entry(abbrev.to_ascii_uppercase()).or_insert_with(|| {
+              chrono::Offset::fix(&offset).local_minus_utc() as i64
+            });
+          }
+        }
+      }
+      m
+    });
+
+    map.get(&name.to_ascii_uppercase()).copied()
+  }
+
   fn iso_date(&mut self, year: u32) -> DateResult<DateSpec> {
     let month = self.scanner.get_int::<u32>()?;
     self.scanner.get_ch_matching(&['-'])?;
@@ -53,27 +90,8 @@ impl<'a> DateParser<'a> {
     let next_token = self.scanner.get();
     if next_token.is_integer() {
       let hour = next_token.to_int_result::<u32>()?;
-      // Expect colon for minutes
       self.scanner.get_ch_matching(&[':'])?;
-      let min = self.scanner.get_int::<u32>()?;
-      // Get AM/PM
-      let am_pm_token = self.scanner.get();
-      if let Some(am_pm) = am_pm_token.as_iden() {
-        let am_pm_lower = am_pm.to_lowercase();
-        if am_pm_lower == "am" || am_pm_lower == "pm" {
-          let final_hour = if am_pm_lower == "pm" && hour != 12 {
-            hour + 12
-          }
-          else if am_pm_lower == "am" && hour == 12 {
-            0
-          }
-          else {
-            hour
-          };
-          // Store the parsed time with minutes using the PreParsed variant
-          self.maybe_time = Some((final_hour, TimeKind::PreParsed(min)));
-        }
-      }
+      self.maybe_time = Some((hour, TimeKind::Formal));
     }
 
     Ok(DateSpec::absolute(year, month, day))
@@ -462,22 +480,20 @@ impl<'a> DateParser<'a> {
         Ok(TimeSpec::new_with_offset(hour, min, sec, offset, micros))
       }
       else if let Some(id) = tok.as_iden() {
-        if id == "Z" {
+        let id_lower = id.to_ascii_lowercase();
+        if id_lower == "z" {
           Ok(TimeSpec::new_with_offset(hour, min, sec, 0, micros))
         }
-        else {
-          // id is not "Z"
-          // check if it's am or pm
-          let final_hour = if id == "am" || id == "pm" {
-            DateParser::am_pm(id, hour)?
-          }
-          else {
-            // It's some other identifier (like "at").
-            // Ignore it and use the original hour.
-            // The token `id` was already consumed by scanner.next() earlier.
-            hour
-          };
+        else if id_lower == "am" || id_lower == "pm" {
+          let final_hour = DateParser::am_pm(&id_lower, hour)?;
           Ok(TimeSpec::new(final_hour, min, sec, micros))
+        }
+        else if let Some(offset) = Self::timezone_abbrev_offset(id) {
+          Ok(TimeSpec::new_with_offset(hour, min, sec, offset, micros))
+        }
+        else {
+          // Unknown identifier (e.g. "at") — ignore it
+          Ok(TimeSpec::new(hour, min, sec, micros))
         }
       }
       else {

@@ -43,14 +43,14 @@ tasklite add "Buy bike" due:(tu 2 week)
 
 ## Related
 
-- [`biff`] - CLI tool for datetime arithmetic, parsing, formatting, etc.
+- [`bttf`] - CLI tool for datetime arithmetic, parsing, formatting, etc.
 - [dateutils] - CLI date and time utilities for calculations and conversions
 - [`fuzzy-time`] - Haskell package for parsing fuzzy time strings.
 - [utcify.ad-si.com] - Web tool to convert local-time strings to UTC.
 - [uutils `date`] - Print or set the system date and time.
 - [`when`] - Timezone CLI tool.
 
-[`biff`]: https://github.com/BurntSushi/biff
+[`bttf`]: https://github.com/BurntSushi/bttf
 [dateutils]: https://github.com/hroptatyr/dateutils
 [`fuzzy-time`]: https://github.com/NorfairKing/fuzzy-time
 [utcify.ad-si.com]: https://utcify.ad-si.com

@@ -82,11 +82,9 @@ impl ByName {
     Some(if let Some(wd) = week_day(s) {
       ByName::WeekDay(NamedDate::new(direct, wd))
     }
-    else if let Some(mn) = month_name(s) {
-      ByName::MonthName(NamedDate::new(direct, mn))
-    }
     else {
-      return None;
+      let mn = month_name(s)?;
+      ByName::MonthName(NamedDate::new(direct, mn))
     })
   }
 

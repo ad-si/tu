@@ -516,6 +516,7 @@ pub fn time_unit(s: &str) -> Option<Interval> {
     "day" => Days(1),
     "wee" => Days(7),
     "mon" => Months(1),
+    "qua" => Months(3),
     "yea" => Months(12),
     _ => return None,
   })

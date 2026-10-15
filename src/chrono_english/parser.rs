@@ -21,36 +21,99 @@ fn is_ordinal_suffix(name: &str) -> bool {
     .any(|suffix| name.eq_ignore_ascii_case(suffix))
 }
 
+const CARDINALS: [&str; 20] = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+];
+
+const TENS: [&str; 8] = [
+  "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety",
+];
+
+const ORDINALS: [&str; 20] = [
+  "zeroth",
+  "first",
+  "second",
+  "third",
+  "fourth",
+  "fifth",
+  "sixth",
+  "seventh",
+  "eighth",
+  "ninth",
+  "tenth",
+  "eleventh",
+  "twelfth",
+  "thirteenth",
+  "fourteenth",
+  "fifteenth",
+  "sixteenth",
+  "seventeenth",
+  "eighteenth",
+  "nineteenth",
+];
+
+const TENS_ORDINALS: [&str; 8] = [
+  "twentieth",
+  "thirtieth",
+  "fortieth",
+  "fiftieth",
+  "sixtieth",
+  "seventieth",
+  "eightieth",
+  "ninetieth",
+];
+
+/// Number for a single word like "five", "twelve", or "thirty"
+fn cardinal_word(name: &str) -> Option<u32> {
+  let tens = || TENS.iter().position(|w| *w == name).map(|i| 20 + 10 * i);
+  CARDINALS
+    .iter()
+    .position(|w| *w == name)
+    .or_else(tens)
+    .map(|n| n as u32)
+}
+
+/// Number for a single word like "fifth", "twelfth", or "thirtieth"
 fn ordinal_word(name: &str) -> Option<u32> {
-  const ORDINALS: [&str; 20] = [
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh",
-    "eighth",
-    "ninth",
-    "tenth",
-    "eleventh",
-    "twelfth",
-    "thirteenth",
-    "fourteenth",
-    "fifteenth",
-    "sixteenth",
-    "seventeenth",
-    "eighteenth",
-    "nineteenth",
-    "twentieth",
-  ];
-  if name == "thirtieth" {
-    return Some(30);
-  }
+  let tens = || {
+    TENS_ORDINALS
+      .iter()
+      .position(|w| *w == name)
+      .map(|i| 20 + 10 * i)
+  };
   ORDINALS
     .iter()
-    .position(|ordinal| *ordinal == name)
-    .map(|pos| pos as u32 + 1)
+    .position(|w| *w == name)
+    .or_else(tens)
+    .filter(|n| *n > 0)
+    .map(|n| n as u32)
+}
+
+/// A number written as words
+enum WordNumber {
+  /// e.g. "a", "five", "twenty-one", "half", "a few"
+  Cardinal(f64),
+  /// e.g. "third", "twenty-fourth"
+  Ordinal(u32),
 }
 
 /// Expand a two-digit year like POSIX `%y`: 69-99 → 1969-1999, 00-68 → 2000-2068
@@ -163,6 +226,96 @@ impl<'a> DateParser<'a> {
       self.unget(t);
       false
     }
+  }
+
+  /// Consume the next token if it is one of the given words
+  fn skip_word(&mut self, words: &[&str]) -> bool {
+    let t = self.get();
+    if t
+      .as_iden()
+      .is_some_and(|s| words.iter().any(|w| s.eq_ignore_ascii_case(w)))
+    {
+      true
+    }
+    else {
+      self.unget(t);
+      false
+    }
+  }
+
+  /// Parse the ones after a tens word (e.g. "twenty-five", "twenty fifth").
+  /// Returns the ones and whether they are an ordinal.
+  fn ones_after_tens(&mut self) -> Option<(u32, bool)> {
+    let t = self.get();
+    let hyphen = t.as_char() == Some('-');
+    let word = if hyphen { self.get() } else { t };
+    let lowercase = word.as_iden().map(str::to_lowercase);
+    let ones = lowercase.as_deref().and_then(|w| {
+      cardinal_word(w)
+        .map(|n| (n, false))
+        .or_else(|| ordinal_word(w).map(|n| (n, true)))
+    });
+    match ones {
+      Some((n, is_ordinal)) if (1..=9).contains(&n) => Some((n, is_ordinal)),
+      _ => {
+        self.unget(word);
+        if hyphen {
+          self.unget_len(Token::Char('-'), 0);
+        }
+        None
+      }
+    }
+  }
+
+  /// Parse a number written as words, starting with the given (lowercase) word
+  fn word_number(&mut self, first: &str) -> Option<WordNumber> {
+    use WordNumber::*;
+    Some(match first {
+      "a" | "an" => {
+        if self.skip_word(&["few"]) {
+          Cardinal(3.0)
+        }
+        else if self.skip_word(&["couple"]) {
+          self.skip_word(&["of"]);
+          Cardinal(2.0)
+        }
+        else if self.skip_word(&["half"]) {
+          Cardinal(0.5)
+        }
+        else {
+          Cardinal(1.0)
+        }
+      }
+      "half" => {
+        self.skip_word(&["a", "an"]);
+        Cardinal(0.5)
+      }
+      "couple" => {
+        self.skip_word(&["of"]);
+        Cardinal(2.0)
+      }
+      "few" => Cardinal(3.0),
+      "several" => Cardinal(7.0),
+      _ => {
+        if let Some(n) = ordinal_word(first) {
+          Ordinal(n)
+        }
+        else {
+          let n = cardinal_word(first)?;
+          let ones = if n >= 20 {
+            self.ones_after_tens()
+          }
+          else {
+            None
+          };
+          match ones {
+            Some((ones, true)) => Ordinal(n + ones),
+            Some((ones, false)) => Cardinal((n + ones) as f64),
+            None => Cardinal(n as f64),
+          }
+        }
+      }
+    })
   }
 
   fn date_shortcut_offset(name: &str) -> Option<i32> {
@@ -342,13 +495,22 @@ impl<'a> DateParser<'a> {
         }
         Ok(Some(t.to_int_result::<u32>()?))
       }
-      Token::Iden(ref name) => match ordinal_word(&name.to_lowercase()) {
-        Some(day) => Ok(Some(day)),
-        None => {
-          self.unget(t);
-          Ok(None)
+      Token::Iden(ref name) => {
+        let lowercase = name.to_lowercase();
+        // Only ordinals, as "may five" or "may a" are no dates
+        let is_ordinal = ordinal_word(&lowercase).is_some()
+          || TENS.contains(&lowercase.as_str());
+        match is_ordinal.then(|| self.word_number(&lowercase)).flatten() {
+          Some(WordNumber::Ordinal(day)) => Ok(Some(day)),
+          Some(WordNumber::Cardinal(_)) => {
+            date_result("expected ordinal day after month name")
+          }
+          None => {
+            self.unget_len(t, 0);
+            Ok(None)
+          }
         }
-      },
+      }
       t => {
         self.unget(t);
         Ok(None)
@@ -473,6 +635,34 @@ impl<'a> DateParser<'a> {
 
   /// A date starting with a name (e.g. "friday", "march 3", "nov14", "week")
   fn named_date(&mut self, name: &str) -> DateResult<Option<DateSpec>> {
+    // A number written as words (e.g. "a week ago", "twenty-fourth of May")
+    match self.word_number(name) {
+      Some(WordNumber::Cardinal(n)) => {
+        let unit = self
+          .get()
+          .as_iden()
+          .and_then(|unit| time_unit(&unit.to_lowercase()));
+        return match unit {
+          Some(unit) => Ok(Some(self.relative(n, unit, false)?)),
+          None => date_result("expected time unit after number"),
+        };
+      }
+      Some(WordNumber::Ordinal(day)) => {
+        let has_of = self.skip_word(&["of"]);
+        let t = self.get();
+        let month = t
+          .as_iden()
+          .and_then(|month| month_name(&month.to_lowercase()));
+        match month {
+          Some(month) => return Ok(Some(self.day_month_spec(day, month)?)),
+          // "second" is also a time unit
+          None if !has_of && time_unit(name).is_some() => self.unget(t),
+          None => return date_result("expected month name after ordinal"),
+        }
+      }
+      None => {}
+    }
+
     let (alpha, digits) = split_trailing_digits(name);
     if let Some(by_name) = ByName::from_name(alpha, self.direct) {
       // a MONTH _might_ be followed by DAY, YEAR

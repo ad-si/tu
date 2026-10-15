@@ -344,7 +344,33 @@ fn test_parse_date_string() {
       (2024, 6, 15, 6, 15, 0),
     ),
     ("10:00 MON", (2024, 1, 3, 9, 0, 0), (2024, 1, 8, 10, 0, 0)),
+    // Numbers written as words
+    ("a week ago", (2024, 1, 10, 9, 0, 0), (2024, 1, 3, 9, 0, 0)),
+    ("in an hour", (2024, 1, 1, 9, 0, 0), (2024, 1, 1, 10, 0, 0)),
+    (
+      "half an hour ago",
+      (2024, 1, 1, 9, 0, 0),
+      (2024, 1, 1, 8, 30, 0),
+    ),
+    ("in a half year", dt!(2024, 1, 1), dt!(2024, 7, 1)),
+    ("five days ago", dt!(2024, 1, 10), dt!(2024, 1, 5)),
+    (
+      "twenty-five minutes ago",
+      (2024, 1, 1, 9, 0, 0),
+      (2024, 1, 1, 8, 35, 0),
+    ),
+    ("in twenty one days", dt!(2024, 1, 1), dt!(2024, 1, 22)),
+    ("in a couple of days", dt!(2024, 1, 1), dt!(2024, 1, 3)),
+    ("a few days ago", dt!(2024, 1, 10), dt!(2024, 1, 7)),
+    ("in several hours", dt!(2024, 1, 1), (2024, 1, 1, 7, 0, 0)),
+    ("next two weeks", dt!(2024, 1, 1), dt!(2024, 1, 15)),
+    ("next quarter", dt!(2024, 1, 1), dt!(2024, 4, 1)),
+    ("twenty-fourth of May", dt!(2024, 1, 1), dt!(2024, 5, 24)),
+    ("May twenty-fourth", dt!(2024, 1, 1), dt!(2024, 5, 24)),
+    ("thirtieth of december", dt!(2024, 1, 1), dt!(2024, 12, 30)),
+    ("second", dt!(2024, 1, 1), (2024, 1, 1, 0, 0, 1)),
     // Month offsets crossing a year boundary
+    ("one year ago", dt!(2024, 1, 6), dt!(2023, 1, 6)),
     ("12 months ago", dt!(2024, 1, 6), dt!(2023, 1, 6)),
     ("13 months ago", dt!(2024, 1, 6), dt!(2022, 12, 6)),
     ("in 24 months", dt!(2024, 1, 6), dt!(2026, 1, 6)),
@@ -472,6 +498,10 @@ fn invalid_times_return_error() {
     "12:00 FOO",
     "2024-01-01 12:00 XYZ",
     "5pm ABC",
+    "five",
+    "a",
+    "may five",
+    "twenty-fourth",
   ] {
     let args: Vec<String> =
       input.split_whitespace().map(String::from).collect();

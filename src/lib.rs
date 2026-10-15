@@ -67,13 +67,7 @@ pub fn parse_date_args(
 
   // Remove "in" or "at" from the beginning
   let args_combined = append_min_if_only_hour(
-    if let Some(rest) = strip_prefix_ignore_case(combined, "in a ") {
-      format!("1 {rest}")
-    }
-    else if let Some(rest) = strip_prefix_ignore_case(combined, "in an ") {
-      format!("1 {rest}")
-    }
-    else if let Some(rest) = strip_prefix_ignore_case(combined, "in ") {
+    if let Some(rest) = strip_prefix_ignore_case(combined, "in ") {
       rest.to_string()
     }
     else if let Some(rest) = strip_prefix_ignore_case(combined, "at ") {

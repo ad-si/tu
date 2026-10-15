@@ -7,7 +7,7 @@ mod chrono_english {
   pub mod types;
 }
 
-use chrono_english::lib::{parse_date_string, DateError, Dialect};
+use chrono_english::lib::{date_error, parse_date_string, DateError, Dialect};
 
 const DIALECT: Dialect = Dialect::Us;
 
@@ -42,30 +42,56 @@ fn append_min_if_only_hour(input: &str) -> String {
   input.to_string()
 }
 
+fn strip_prefix_ignore_case<'a>(s: &'a str, prefix: &str) -> Option<&'a str> {
+  s.get(..prefix.len())
+    .filter(|start| start.eq_ignore_ascii_case(prefix))
+    .map(|_| &s[prefix.len()..])
+}
+
 /// Parse date arguments and convert to UTC timestamp
 pub fn parse_date_args(
   args: &[String],
   now: DateTime<Utc>,
 ) -> Result<DateTime<Utc>, DateError> {
+  let combined = args.join(" ");
+  let combined = combined.trim();
+
+  if let Some(rest) = strip_prefix_ignore_case(combined, "in ") {
+    if rest.to_lowercase().ends_with(" ago") {
+      return Err(date_error("'in' and 'ago' cannot be combined"));
+    }
+    if rest.trim_start().starts_with(['+', '-']) {
+      return Err(date_error("'in' cannot be combined with a sign"));
+    }
+  }
+
   // Remove "in" or "at" from the beginning
   let args_combined = append_min_if_only_hour(
-    {
-      let combined = args.join(" ");
-      if let Some(stripped) = combined.strip_prefix("in a ") {
-        format!("1 {stripped}")
-      }
-      else if let Some(stripped) = combined.strip_prefix("in an ") {
-        format!("1 {stripped}")
-      }
-      else if let Some(stripped) = combined.strip_prefix("in ") {
-        stripped.to_string()
-      }
-      else if let Some(stripped) = combined.strip_prefix("at ") {
-        stripped.to_string()
+    if let Some(rest) = strip_prefix_ignore_case(combined, "in a ") {
+      format!("1 {rest}")
+    }
+    else if let Some(rest) = strip_prefix_ignore_case(combined, "in an ") {
+      format!("1 {rest}")
+    }
+    else if let Some(rest) = strip_prefix_ignore_case(combined, "in ") {
+      rest.to_string()
+    }
+    else if let Some(rest) = strip_prefix_ignore_case(combined, "at ") {
+      let stripped = rest.trim();
+      // "at 5" means 5 o'clock and not a Unix timestamp
+      if !stripped.is_empty() && stripped.chars().all(|c| c.is_ascii_digit()) {
+        match stripped.len() {
+          1 | 2 => format!("{stripped}:00"),
+          4 => format!("{}:{}", &stripped[..2], &stripped[2..]),
+          _ => return Err(date_error(format!("invalid time '{stripped}'"))),
+        }
       }
       else {
-        combined
+        stripped.to_string()
       }
+    }
+    else {
+      combined.to_string()
     }
     .trim(),
   );

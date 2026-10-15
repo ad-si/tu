@@ -259,6 +259,45 @@ fn test_parse_date_string() {
       dt!(2024, 1, 1),
       (2024, 8, 9, 22, 0, 0), // AEST = UTC+10
     ),
+    // "at N" is an hour and not a Unix timestamp
+    ("at 12", (2024, 1, 1, 9, 0, 0), (2024, 1, 1, 12, 0, 0)),
+    ("at 1230", (2024, 1, 1, 9, 0, 0), (2024, 1, 1, 12, 30, 0)),
+    // Same week day as today (2024-01-03 is a Wednesday)
+    ("next wed", (2024, 1, 3, 9, 0, 0), dt!(2024, 1, 10)),
+    ("last wed", (2024, 1, 3, 9, 0, 0), dt!(2023, 12, 27)),
+    ("wed 10:00", (2024, 1, 3, 9, 0, 0), (2024, 1, 3, 10, 0, 0)),
+    ("wed 8:00", (2024, 1, 3, 9, 0, 0), (2024, 1, 10, 8, 0, 0)),
+    ("wednesday", (2024, 1, 3, 9, 0, 0), dt!(2024, 1, 10)),
+    // "month" is not "mon(day)"
+    ("next month", (2024, 1, 3, 9, 0, 0), (2024, 2, 3, 9, 0, 0)),
+    ("last month", (2024, 1, 3, 9, 0, 0), (2023, 12, 3, 9, 0, 0)),
+    // Month offsets keep the time of day like day offsets
+    ("1 month", (2024, 1, 3, 9, 30, 0), (2024, 2, 3, 9, 30, 0)),
+    ("last 2 weeks", dt!(2024, 1, 15), dt!(2024, 1, 1)),
+    ("in 1.05 hours", dt!(2024, 1, 1), (2024, 1, 1, 1, 3, 0)),
+    ("12.30pm", dt!(2024, 1, 1), (2024, 1, 1, 12, 30, 0)),
+    ("8:02p.m.", dt!(2024, 1, 1), (2024, 1, 1, 20, 2, 0)),
+    ("5pm EST", dt!(2024, 1, 1), (2024, 1, 1, 22, 0, 0)),
+    ("12:34:56-09", dt!(2024, 1, 1), (2024, 1, 1, 21, 34, 56)),
+    ("Aug 9, 96", dt!(2024, 1, 1), dt!(1996, 8, 9)),
+    ("22-11-14", dt!(2024, 1, 1), dt!(2022, 11, 14)),
+    ("Jan 1 2025, 9:30", dt!(2024, 1, 1), (2025, 1, 1, 9, 30, 0)),
+    (
+      "Jul 18 06:14:49 2024",
+      dt!(2024, 1, 1),
+      (2024, 7, 18, 6, 14, 49),
+    ),
+    (
+      "14:15 05/31/2024",
+      dt!(2024, 1, 1),
+      (2024, 5, 31, 14, 15, 0),
+    ),
+    ("nov14", dt!(2024, 1, 1), dt!(2024, 11, 14)),
+    ("14nov2022", dt!(2024, 1, 1), dt!(2022, 11, 14)),
+    ("march third", dt!(2024, 1, 1), dt!(2024, 3, 3)),
+    ("oct 22nd 1987", dt!(2024, 1, 1), dt!(1987, 10, 22)),
+    ("1997-01-01 00:00 +1 year", dt!(2024, 1, 1), dt!(1998, 1, 1)),
+    ("+3h", dt!(2024, 1, 1), (2024, 1, 1, 3, 0, 0)),
   ];
   let max_test_len = tests
     .clone()
@@ -332,6 +371,61 @@ fn test_unix_timestamp_edge_cases() {
         1970,
         "Mixed string '{input}' was incorrectly parsed as Unix timestamp"
       );
+    }
+  }
+}
+
+#[test]
+fn standalone_midnight_and_noon() {
+  let now = Utc.with_ymd_and_hms(2026, 4, 10, 9, 0, 0).unwrap();
+  for (input, hour) in [
+    ("12am", 0),
+    ("12pm", 12),
+    ("12:00am", 0),
+    ("12:00pm", 12),
+    ("12:00 AM", 0),
+    ("12:00 PM", 12),
+    ("1am", 1),
+    ("11pm", 23),
+  ] {
+    let args = vec![input.to_string()];
+    let expected = Utc.with_ymd_and_hms(2026, 4, 10, hour, 0, 0).unwrap();
+    assert_eq!(parse_date_args(&args, now).unwrap(), expected, "{input}");
+  }
+}
+
+#[test]
+fn invalid_times_return_error() {
+  let now = Utc.with_ymd_and_hms(2026, 4, 10, 9, 0, 0).unwrap();
+  for input in [
+    "0am",
+    "0pm",
+    "13pm",
+    "13am",
+    "5:60pm",
+    "25:00",
+    "24:00",
+    "12:60",
+    "12:00:60",
+    "friday 25:00",
+    "tomorrow 13pm",
+    "Jan 1, 2025, 13:00 PM UTC",
+    "23:59:59+24:01",
+    "-3",
+    "- 1997-01-01",
+    "1997-01-01 bogus",
+    "01:02 1234",
+    "06:14:49 06:14:49",
+    "in 1 seconds ago",
+    "0.5",
+  ] {
+    let args: Vec<String> =
+      input.split_whitespace().map(String::from).collect();
+    let result = std::panic::catch_unwind(|| parse_date_args(&args, now));
+    match result {
+      Ok(Err(_)) => {}
+      Ok(Ok(date)) => panic!("Expected error for \"{input}\", got {date}"),
+      Err(_) => panic!("Panicked for \"{input}\""),
     }
   }
 }

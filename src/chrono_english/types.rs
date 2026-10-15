@@ -112,41 +112,48 @@ impl ByName {
     let this_year = base.year();
     match self {
       ByName::WeekDay(ref nd) => {
-        // a plain 'Friday' means the same as 'next Friday'.
-        // an _explicit_ 'next Friday' has dialect-dependent meaning!
-        // In UK English, it means 'Friday of next week',
-        // but in US English, just the next Friday
-        let mut extra_week = 0;
-        let mut direction = nd.direct;
-        match direction {
-          Direction::Here => direction = Direction::Next,
-          Direction::Next => {
-            if !american {
-              extra_week = 7;
-            }
-          }
-          _ => (),
-        };
         let this_day = base.weekday().num_days_from_monday() as i64;
         let that_day = nd.unit as i64;
         let diff_days = that_day - this_day;
-        let mut date = add_days(base, diff_days)?;
-        if let Some(correct) = next_last_direction(&date, &base, direction) {
-          date = add_days(date, 7 * correct as i64)?;
-        }
-        if extra_week > 0 {
-          date = add_days(date, extra_week)?;
-        }
-        if diff_days == 0 {
-          // same day - comparing times will determine which way we swing...
-          let base_time = base.time();
-          let this_time = NaiveTime::from_hms(ts.hour, ts.min, ts.sec);
-          if let Some(correct) =
-            next_last_direction(&this_time, &base_time, direction)
-          {
-            date = add_days(date, 7 * correct as i64)?;
+        let shift_weeks = match nd.direct {
+          // A plain 'Friday' means the upcoming Friday.
+          // On a Friday, it's today unless the time has already passed.
+          Direction::Here => {
+            let has_passed =
+              NaiveTime::from_hms_opt(ts.hour, ts.min, ts.sec)? < base.time();
+            if diff_days < 0 || (diff_days == 0 && has_passed) {
+              1
+            }
+            else {
+              0
+            }
           }
-        }
+          // An explicit 'next Friday' has dialect-dependent meaning!
+          // In US English, it's just the next Friday,
+          // but in UK English, it means 'Friday of next week'.
+          Direction::Next => {
+            if american {
+              if diff_days <= 0 {
+                1
+              }
+              else {
+                0
+              }
+            }
+            else {
+              1
+            }
+          }
+          Direction::Last => {
+            if diff_days >= 0 {
+              -1
+            }
+            else {
+              0
+            }
+          }
+        };
+        let date = add_days(base, diff_days + 7 * shift_weeks)?;
         ts.to_date_time(date.date())
       }
       ByName::MonthName(ref nd) => {
@@ -228,20 +235,14 @@ impl Skip {
     ts: TimeSpec,
   ) -> Option<DateTime<Tz>> {
     Some(match self.unit {
-      Interval::Seconds(secs) => {
-        base
-          .checked_add_signed(Duration::seconds(
-            ((secs as f64) * self.skip) as i64,
-          ))
-          .unwrap() // <--- !!!!
-      }
+      Interval::Seconds(secs) => base.checked_add_signed(Duration::seconds(
+        ((secs as f64) * self.skip) as i64,
+      ))?,
       Interval::Days(days) => {
         let secs = 60 * 60 * 24 * days;
-        let date = base
-          .checked_add_signed(Duration::seconds(
-            ((secs as f64) * self.skip) as i64,
-          ))
-          .unwrap();
+        let date = base.checked_add_signed(Duration::seconds(
+          ((secs as f64) * self.skip) as i64,
+        ))?;
         if !ts.empty() {
           ts.to_date_time(date.date())?
         }
@@ -277,7 +278,14 @@ impl Skip {
           }
           date = base.timezone().ymd_opt(year, month as u32, day).single();
         }
-        ts.to_date_time(date.unwrap())?
+        let date = date.unwrap();
+        if ts.empty() {
+          // keep the time of day like for seconds and days
+          date.and_time(base.time())?
+        }
+        else {
+          ts.to_date_time(date)?
+        }
       }
     })
   }
@@ -393,12 +401,13 @@ impl TimeSpec {
     &self,
     date: Date<Tz>,
   ) -> Option<DateTime<Tz>> {
-    let dt = date.and_hms_micro(self.hour, self.min, self.sec, self.microsec);
+    let dt =
+      date.and_hms_micro_opt(self.hour, self.min, self.sec, self.microsec)?;
     if let Some(offs) = self.offset {
       let zoffset = dt.offset().clone();
       let tstamp =
         dt.timestamp() - offs + zoffset.fix().local_minus_utc() as i64;
-      let nd = NaiveDateTime::from_timestamp(tstamp, 1000 * self.microsec);
+      let nd = NaiveDateTime::from_timestamp_opt(tstamp, 1000 * self.microsec)?;
       Some(DateTime::from_utc(nd, zoffset))
     }
     else {
@@ -411,44 +420,51 @@ impl TimeSpec {
 pub struct DateTimeSpec {
   pub date: Option<DateSpec>,
   pub time: Option<TimeSpec>,
+  /// Relative offsets applied after the date and time (e.g. "+1 year")
+  pub skips: Vec<Skip>,
+}
+
+/// Index of the name which `s` is an abbreviation of (at least 3 chars)
+fn name_prefix_index(names: &[&str], s: &str) -> Option<u32> {
+  if s.len() < 3 {
+    return None;
+  }
+  names
+    .iter()
+    .position(|name| name.starts_with(s))
+    .map(|pos| pos as u32)
 }
 
 // same as chrono's 'count days from monday' convention
 pub fn week_day(s: &str) -> Option<u32> {
-  if s.len() < 3 {
-    return None;
-  }
-  Some(match &s[0..3] {
-    "sun" => 6,
-    "mon" => 0,
-    "tue" => 1,
-    "wed" => 2,
-    "thu" => 3,
-    "fri" => 4,
-    "sat" => 5,
-    _ => return None,
-  })
+  const WEEK_DAYS: [&str; 7] = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+  name_prefix_index(&WEEK_DAYS, s)
 }
 
 pub fn month_name(s: &str) -> Option<u32> {
-  if s.len() < 3 {
-    return None;
-  }
-  Some(match &s[0..3] {
-    "jan" => 1,
-    "feb" => 2,
-    "mar" => 3,
-    "apr" => 4,
-    "may" => 5,
-    "jun" => 6,
-    "jul" => 7,
-    "aug" => 8,
-    "sep" => 9,
-    "oct" => 10,
-    "nov" => 11,
-    "dec" => 12,
-    _ => return None,
-  })
+  const MONTHS: [&str; 12] = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  name_prefix_index(&MONTHS, s).map(|i| i + 1)
 }
 
 pub fn time_unit(s: &str) -> Option<Interval> {

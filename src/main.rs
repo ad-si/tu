@@ -35,6 +35,9 @@ fn main() {
   let date = parse_date_args(&args[1..], now);
   match date {
     Ok(date) => print!("{}", to_iso(date)),
-    Err(e) => eprintln!("ERROR:\n{e}"),
+    Err(e) => {
+      eprintln!("ERROR:\n{e}");
+      std::process::exit(1);
+    }
   }
 }

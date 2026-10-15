@@ -26,7 +26,8 @@ pub fn parse_date_string<Tz: TimeZone>(
 where
   Tz::Offset: Copy,
 {
-  let mut dp = parser::DateParser::new(s);
+  let s = normalize_meridiem(s);
+  let mut dp = parser::DateParser::new(&s);
   if let Dialect::Us = dialect {
     dp = dp.american_date();
   }
@@ -37,10 +38,7 @@ where
     Some(tspec) => tspec,
     None => TimeSpec::new_empty(),
   };
-  if tspec.offset.is_some() {
-    //   return DateTime::fix()::parse_from_rfc3339(s);
-  }
-  let date_time = if let Some(dspec) = d.date {
+  let mut date_time = if let Some(dspec) = d.date {
     dspec
       .to_date_time(now, tspec, dp.american)
       .or_err("bad date")?
@@ -49,7 +47,42 @@ where
     // no date, time set for today's date
     tspec.to_date_time(now.date()).or_err("bad time")?
   };
+  for skip in d.skips {
+    date_time = skip
+      .to_date_time(date_time, TimeSpec::new_empty())
+      .or_err("bad relative offset")?;
+  }
   Ok(date_time)
+}
+
+/// Replace dotted meridiems with plain ones ("8 p.m." → "8 pm")
+fn normalize_meridiem(s: &str) -> String {
+  let chars: Vec<char> = s.chars().collect();
+  let mut result = String::with_capacity(s.len());
+  let mut i = 0;
+  while i < chars.len() {
+    let ch = chars[i];
+    let at_word_start =
+      i == 0 || chars[i - 1].is_ascii_digit() || chars[i - 1].is_whitespace();
+    let is_dotted = matches!(ch, 'a' | 'A' | 'p' | 'P')
+      && chars.get(i + 1) == Some(&'.')
+      && matches!(chars.get(i + 2), Some('m' | 'M'));
+    if at_word_start && is_dotted {
+      let mut end = i + 3;
+      if chars.get(end) == Some(&'.') {
+        end += 1;
+      }
+      if !chars.get(end).is_some_and(|c| c.is_alphanumeric()) {
+        result.push(ch);
+        result.push('m');
+        i = end;
+        continue;
+      }
+    }
+    result.push(ch);
+    i += 1;
+  }
+  result
 }
 
 pub fn parse_duration(s: &str) -> DateResult<Interval> {

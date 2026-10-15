@@ -298,6 +298,52 @@ fn test_parse_date_string() {
     ("oct 22nd 1987", dt!(2024, 1, 1), dt!(1987, 10, 22)),
     ("1997-01-01 00:00 +1 year", dt!(2024, 1, 1), dt!(1998, 1, 1)),
     ("+3h", dt!(2024, 1, 1), (2024, 1, 1, 3, 0, 0)),
+    // Generic regional timezones depend on daylight saving time
+    (
+      "2024-01-04 12:00 ET",
+      dt!(2024, 1, 1),
+      (2024, 1, 4, 17, 0, 0),
+    ),
+    (
+      "2024-07-04 12:00 ET",
+      dt!(2024, 1, 1),
+      (2024, 7, 4, 16, 0, 0),
+    ),
+    (
+      "2024-07-04 12:00 PT",
+      dt!(2024, 1, 1),
+      (2024, 7, 4, 19, 0, 0),
+    ),
+    ("5pm CT", (2024, 7, 4, 9, 0, 0), (2024, 7, 4, 22, 0, 0)),
+    // Skipped hour when DST starts: use the time after the gap
+    (
+      "2021-03-14 2:30 ET",
+      dt!(2024, 1, 1),
+      (2021, 3, 14, 7, 30, 0),
+    ),
+    // Repeated hour when DST ends: use the first one
+    (
+      "2021-11-07 1:30 ET",
+      dt!(2024, 1, 1),
+      (2021, 11, 7, 5, 30, 0),
+    ),
+    // Abbreviations which are not in the IANA timezone database anymore
+    (
+      "1997-01-19 08:17:48 BRT",
+      dt!(2024, 1, 1),
+      (1997, 1, 19, 11, 17, 48),
+    ),
+    (
+      "2024-06-15 12:00 GST",
+      dt!(2024, 1, 1),
+      (2024, 6, 15, 8, 0, 0),
+    ),
+    (
+      "2024-06-15 12:00 NPT",
+      dt!(2024, 1, 1),
+      (2024, 6, 15, 6, 15, 0),
+    ),
+    ("10:00 MON", (2024, 1, 3, 9, 0, 0), (2024, 1, 8, 10, 0, 0)),
   ];
   let max_test_len = tests
     .clone()
@@ -418,6 +464,10 @@ fn invalid_times_return_error() {
     "06:14:49 06:14:49",
     "in 1 seconds ago",
     "0.5",
+    // Unknown timezones must not be ignored
+    "12:00 FOO",
+    "2024-01-01 12:00 XYZ",
+    "5pm ABC",
   ] {
     let args: Vec<String> =
       input.split_whitespace().map(String::from).collect();

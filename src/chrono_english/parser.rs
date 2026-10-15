@@ -175,6 +175,81 @@ impl<'a> DateParser<'a> {
     }
   }
 
+  /// Timezone for a name like "UTC", "CET", "BRT", or "ET"
+  fn timezone(name: &str) -> Option<Zone> {
+    use chrono_tz::Tz;
+
+    let name = name.to_ascii_uppercase();
+    // Generic names of regions which switch between standard and daylight
+    // saving time (e.g. ET is EST in winter and EDT in summer)
+    let region = match name.as_str() {
+      "ET" => Some(Tz::America__New_York),
+      "CT" => Some(Tz::America__Chicago),
+      "MT" => Some(Tz::America__Denver),
+      "PT" => Some(Tz::America__Los_Angeles),
+      "AKT" => Some(Tz::America__Anchorage),
+      _ => None,
+    };
+    region.map(Zone::Region).or_else(|| {
+      Self::timezone_abbrev_offset(&name)
+        .or_else(|| Self::legacy_timezone_offset(&name))
+        .map(Zone::Offset)
+    })
+  }
+
+  /// Offsets of common abbreviations which were removed from the
+  /// IANA timezone database in favor of numeric ones (e.g. "-03" for "BRT")
+  fn legacy_timezone_offset(name: &str) -> Option<i64> {
+    let (hours, minutes) = match name {
+      "UT" => (0, 0),
+      // South America
+      "BRT" => (-3, 0),
+      "BRST" => (-2, 0),
+      "ART" => (-3, 0),
+      "UYT" => (-3, 0),
+      "GFT" => (-3, 0),
+      "SRT" => (-3, 0),
+      "CLT" => (-4, 0),
+      "CLST" => (-3, 0),
+      "BOT" => (-4, 0),
+      "PYT" => (-4, 0),
+      "VET" => (-4, 0),
+      "COT" => (-5, 0),
+      "PET" => (-5, 0),
+      // Europe and Asia
+      "TRT" => (3, 0),
+      "IRST" => (3, 30),
+      "GST" => (4, 0),
+      "AZT" => (4, 0),
+      "GET" => (4, 0),
+      "AFT" => (4, 30),
+      "UZT" => (5, 0),
+      "YEKT" => (5, 0),
+      "NPT" => (5, 45),
+      "BTT" => (6, 0),
+      "OMST" => (6, 0),
+      "MMT" => (6, 30),
+      "ICT" => (7, 0),
+      "KRAT" => (7, 0),
+      "NOVT" => (7, 0),
+      "SGT" => (8, 0),
+      "MYT" => (8, 0),
+      "PHT" => (8, 0),
+      "IRKT" => (8, 0),
+      "ULAT" => (8, 0),
+      "YAKT" => (9, 0),
+      "VLAT" => (10, 0),
+      "MAGT" => (11, 0),
+      "PETT" => (12, 0),
+      // Pacific
+      "FJT" => (12, 0),
+      "CHAST" => (12, 45),
+      "TOT" => (13, 0),
+      _ => return None,
+    };
+    Some(3600 * hours + 60 * minutes)
+  }
+
   fn timezone_abbrev_offset(name: &str) -> Option<i64> {
     use chrono::{DateTime, TimeZone as _};
     use chrono_tz::{OffsetName, TZ_VARIANTS};
@@ -612,15 +687,21 @@ impl<'a> DateParser<'a> {
           return Ok(TimeSpec::new(hour, min, sec, micros));
         }
         let offset = self.offset(ch)?;
-        Ok(TimeSpec::new_with_offset(hour, min, sec, offset, micros))
+        Ok(TimeSpec::new_with_zone(
+          hour,
+          min,
+          sec,
+          Zone::Offset(offset),
+          micros,
+        ))
       }
       Token::Iden(ref id) if is_am_pm(id) => {
         let final_hour = DateParser::am_pm(id, hour)?;
         Ok(TimeSpec::new(final_hour, min, sec, micros))
       }
-      Token::Iden(ref id) if Self::timezone_abbrev_offset(id).is_some() => {
-        let offset = Self::timezone_abbrev_offset(id).unwrap();
-        Ok(TimeSpec::new_with_offset(hour, min, sec, offset, micros))
+      Token::Iden(ref id) if Self::timezone(id).is_some() => {
+        let zone = Self::timezone(id).unwrap();
+        Ok(TimeSpec::new_with_zone(hour, min, sec, zone, micros))
       }
       t => {
         self.unget(t);
@@ -791,9 +872,9 @@ impl<'a> DateParser<'a> {
       if let Some(name) = t.as_iden() {
         // Timezone abbreviation (e.g. "5pm EST")
         if let Some(ts) = time.as_mut() {
-          if ts.offset.is_none() {
-            if let Some(offset) = Self::timezone_abbrev_offset(name) {
-              ts.offset = Some(offset);
+          if ts.zone.is_none() {
+            if let Some(zone) = Self::timezone(name) {
+              ts.zone = Some(zone);
               continue;
             }
           }
@@ -806,6 +887,20 @@ impl<'a> DateParser<'a> {
           && week_day(&name.to_lowercase()).is_some()
         {
           continue;
+        }
+        // Don't silently ignore unknown timezones (e.g. "12:00 FOO")
+        let lowercase = name.to_lowercase();
+        let is_known_word = week_day(&lowercase).is_some()
+          || month_name(&lowercase).is_some()
+          || (lowercase.len() >= 3 && time_unit(&lowercase).is_some())
+          || Self::date_shortcut_offset(&lowercase).is_some()
+          || Direction::from_name(&lowercase).is_some()
+          || ["at", "on", "to", "in", "by", "and", "the", "till", "until"]
+            .contains(&lowercase.as_str());
+        let looks_like_zone = (2..=5).contains(&name.len())
+          && name.chars().all(|c| c.is_ascii_uppercase());
+        if looks_like_zone && !is_known_word {
+          return date_result(&format!("unknown timezone {name}"));
         }
       }
 

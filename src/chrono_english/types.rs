@@ -1,6 +1,7 @@
 #![allow(deprecated)]
 use chrono::prelude::*;
 use chrono::Duration;
+use chrono::LocalResult;
 
 // implements next/last direction in expressions like 'next friday' and 'last 4 july'
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -343,13 +344,22 @@ impl DateSpec {
   }
 }
 
+/// Timezone of a time
+#[derive(Debug, Clone, Copy)]
+pub enum Zone {
+  /// Fixed offset from UTC in seconds (e.g. "+02:00", "CET")
+  Offset(i64),
+  /// Region whose offset depends on the date (e.g. "ET" for US Eastern Time)
+  Region(chrono_tz::Tz),
+}
+
 #[derive(Debug)]
 pub struct TimeSpec {
   pub hour: u32,
   pub min: u32,
   pub sec: u32,
   pub empty: bool,
-  pub offset: Option<i64>,
+  pub zone: Option<Zone>,
   pub microsec: u32,
 }
 
@@ -360,16 +370,16 @@ impl TimeSpec {
       min,
       sec,
       empty: false,
-      offset: None,
+      zone: None,
       microsec,
     }
   }
 
-  pub fn new_with_offset(
+  pub fn new_with_zone(
     hour: u32,
     min: u32,
     sec: u32,
-    offset: i64,
+    zone: Zone,
     microsec: u32,
   ) -> TimeSpec {
     TimeSpec {
@@ -377,7 +387,7 @@ impl TimeSpec {
       min,
       sec,
       empty: false,
-      offset: Some(offset),
+      zone: Some(zone),
       microsec,
     }
   }
@@ -388,7 +398,7 @@ impl TimeSpec {
       min: 0,
       sec: 0,
       empty: true,
-      offset: None,
+      zone: None,
       microsec: 0,
     }
   }
@@ -401,17 +411,42 @@ impl TimeSpec {
     &self,
     date: Date<Tz>,
   ) -> Option<DateTime<Tz>> {
-    let dt =
-      date.and_hms_micro_opt(self.hour, self.min, self.sec, self.microsec)?;
-    if let Some(offs) = self.offset {
-      let zoffset = dt.offset().clone();
-      let tstamp =
-        dt.timestamp() - offs + zoffset.fix().local_minus_utc() as i64;
-      let nd = NaiveDateTime::from_timestamp_opt(tstamp, 1000 * self.microsec)?;
-      Some(DateTime::from_utc(nd, zoffset))
-    }
-    else {
-      Some(dt)
+    match self.zone {
+      None => {
+        date.and_hms_micro_opt(self.hour, self.min, self.sec, self.microsec)
+      }
+      Some(Zone::Offset(offs)) => {
+        let dt = date.and_hms_micro_opt(
+          self.hour,
+          self.min,
+          self.sec,
+          self.microsec,
+        )?;
+        let zoffset = dt.offset().clone();
+        let tstamp =
+          dt.timestamp() - offs + zoffset.fix().local_minus_utc() as i64;
+        let nd =
+          NaiveDateTime::from_timestamp_opt(tstamp, 1000 * self.microsec)?;
+        Some(DateTime::from_utc(nd, zoffset))
+      }
+      Some(Zone::Region(region)) => {
+        let naive = date.naive_local().and_hms_micro_opt(
+          self.hour,
+          self.min,
+          self.sec,
+          self.microsec,
+        )?;
+        let local = match region.from_local_datetime(&naive) {
+          LocalResult::Single(dt) => dt,
+          // Repeated hour when DST ends: use the first one
+          LocalResult::Ambiguous(earliest, _) => earliest,
+          // Skipped hour when DST starts: use the time after the gap
+          LocalResult::None => region
+            .from_local_datetime(&(naive + Duration::hours(1)))
+            .earliest()?,
+        };
+        Some(local.with_timezone(&date.timezone()))
+      }
     }
   }
 }

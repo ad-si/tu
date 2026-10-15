@@ -344,6 +344,10 @@ fn test_parse_date_string() {
       (2024, 6, 15, 6, 15, 0),
     ),
     ("10:00 MON", (2024, 1, 3, 9, 0, 0), (2024, 1, 8, 10, 0, 0)),
+    // Month offsets crossing a year boundary
+    ("12 months ago", dt!(2024, 1, 6), dt!(2023, 1, 6)),
+    ("13 months ago", dt!(2024, 1, 6), dt!(2022, 12, 6)),
+    ("in 24 months", dt!(2024, 1, 6), dt!(2026, 1, 6)),
   ];
   let max_test_len = tests
     .clone()

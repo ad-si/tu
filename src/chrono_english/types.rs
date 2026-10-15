@@ -253,17 +253,10 @@ impl Skip {
         let (year, month, mut day) =
           (base.year(), (base.month() - 1) as i32, base.day());
         let delta = ((mm as f64) * self.skip) as i32;
-        // Our new month number
+        // Our new month number, which may run over to other years
         let month = month + delta;
-        // Which may run over to the next year and so forth
-        let (year, month) = if month >= 0 {
-          (year + month / 12, month % 12 + 1)
-        }
-        else {
-          // TODO: What the heck is pmm?
-          let pmm = 12 - month;
-          (year - pmm / 12, 12 - pmm % 12 + 1)
-        };
+        let (year, month) =
+          (year + month.div_euclid(12), month.rem_euclid(12) + 1);
         // let chrono work out if the result makes sense
         let mut date =
           base.timezone().ymd_opt(year, month as u32, day).single();

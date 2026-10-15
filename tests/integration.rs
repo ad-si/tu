@@ -502,6 +502,18 @@ fn invalid_times_return_error() {
     "a",
     "may five",
     "twenty-fourth",
+    // Two-digit numbers after a month name are days
+    "August 32",
+    "the day",
+    "for the year",
+    "-1 seconds ago",
+    "midnight 5pm",
+    "noon 12:30",
+    "13 in the morning",
+    "weekday",
+    "end of foo",
+    "@abc",
+    "TZ=\"Foo/Bar\" 2024-01-01",
   ] {
     let args: Vec<String> =
       input.split_whitespace().map(String::from).collect();
@@ -512,4 +524,254 @@ fn invalid_times_return_error() {
       Err(_) => panic!("Panicked for \"{input}\""),
     }
   }
+}
+
+/// Reference time for the feature tests: Thursday, 2026-10-15 09:30:00
+const THU: DateTimeTup = (2026, 10, 15, 9, 30, 0);
+
+fn execute_tests(tests: &[(&str, DateTimeTup)]) {
+  let max_test_len = tests.iter().map(|(input, _)| input.len()).max().unwrap();
+  for (input, expected) in tests {
+    execute_test(max_test_len, input, THU, *expected);
+  }
+}
+
+#[test]
+fn parts_of_the_day() {
+  execute_tests(&[
+    ("noon", (2026, 10, 15, 12, 0, 0)),
+    ("midday", (2026, 10, 15, 12, 0, 0)),
+    // A plain "midnight" is the end of today
+    ("midnight", dt!(2026, 10, 16)),
+    ("this morning", (2026, 10, 15, 6, 0, 0)),
+    ("this afternoon", (2026, 10, 15, 15, 0, 0)),
+    ("evening", (2026, 10, 15, 18, 0, 0)),
+    ("tonight", (2026, 10, 15, 23, 0, 0)),
+    ("last night", (2026, 10, 14, 23, 0, 0)),
+    ("next evening", (2026, 10, 16, 18, 0, 0)),
+    ("tomorrow morning", (2026, 10, 16, 6, 0, 0)),
+    ("tomorrow this afternoon", (2026, 10, 16, 15, 0, 0)),
+    ("Friday afternoon", (2026, 10, 16, 15, 0, 0)),
+    ("on Tuesday morning", (2026, 10, 20, 6, 0, 0)),
+    ("tomorrow at noon", (2026, 10, 16, 12, 0, 0)),
+    ("noon tomorrow", (2026, 10, 16, 12, 0, 0)),
+    ("at midnight on 12th August", dt!(2026, 8, 12)),
+    ("in 6 days at midnight", dt!(2026, 10, 21)),
+    ("12 noon", (2026, 10, 15, 12, 0, 0)),
+    ("6 in the morning", (2026, 10, 15, 6, 0, 0)),
+    ("6 in the evening", (2026, 10, 15, 18, 0, 0)),
+    ("1 at night", (2026, 10, 15, 1, 0, 0)),
+    ("11 at night", (2026, 10, 15, 23, 0, 0)),
+    ("11 tonight", (2026, 10, 15, 23, 0, 0)),
+    ("tonight at 8", (2026, 10, 15, 20, 0, 0)),
+    ("tonight 8pm", (2026, 10, 15, 20, 0, 0)),
+    ("tonight at 11:10 pm", (2026, 10, 15, 23, 10, 0)),
+    ("this afternoon at 3", (2026, 10, 15, 15, 0, 0)),
+    ("tomorrow at 7", (2026, 10, 16, 7, 0, 0)),
+    ("Jan 1, 2020 Morning UTC", (2020, 1, 1, 6, 0, 0)),
+  ]);
+}
+
+#[test]
+fn months_with_years() {
+  execute_tests(&[
+    ("September 2012", dt!(2012, 9, 1)),
+    ("Sep. 2012", dt!(2012, 9, 1)),
+    ("Sep-2012", dt!(2012, 9, 1)),
+    ("June of 2022", dt!(2022, 6, 1)),
+    ("August, 2012", dt!(2012, 8, 1)),
+    ("2024 Aug", dt!(2024, 8, 1)),
+    ("2024-Aug", dt!(2024, 8, 1)),
+    ("2024/August", dt!(2024, 8, 1)),
+    ("9/2012", dt!(2012, 9, 1)),
+    ("09/2012", dt!(2012, 9, 1)),
+  ]);
+}
+
+#[test]
+fn date_formats() {
+  execute_tests(&[
+    ("2015/05/25", dt!(2015, 5, 25)),
+    ("2012/8/10", dt!(2012, 8, 10)),
+    ("2015.05.25", dt!(2015, 5, 25)),
+    ("2014 12 28", dt!(2014, 12, 28)),
+    ("19970101 +1 year", dt!(1998, 1, 1)),
+    ("2018 March 18", dt!(2018, 3, 18)),
+    ("2012/Aug/10", dt!(2012, 8, 10)),
+    ("25.05.2015", dt!(2015, 5, 25)),
+    // Day and month are swapped if only that is valid
+    ("05.25.2015", dt!(2015, 5, 25)),
+    ("25/05/2015", dt!(2015, 5, 25)),
+    ("05-25-2015", dt!(2015, 5, 25)),
+    ("07-27-2022, 02:00 AM", (2022, 7, 27, 2, 0, 0)),
+    ("10-August-2012", dt!(2012, 8, 10)),
+    ("10/August/2012", dt!(2012, 8, 10)),
+    ("10-August 2012", dt!(2012, 8, 10)),
+    ("09-JAN-2017", dt!(2017, 1, 9)),
+    ("14-nov", dt!(2026, 11, 14)),
+    ("August-10-2012", dt!(2012, 8, 10)),
+    ("August/10, 2012", dt!(2012, 8, 10)),
+    ("nov-14-2022", dt!(2022, 11, 14)),
+    ("06/Nov/2023:06:36:02 +0200", (2023, 11, 6, 4, 36, 2)),
+    ("05/31/2024.14:15", (2024, 5, 31, 14, 15, 0)),
+    ("05/31/2024:14:15", (2024, 5, 31, 14, 15, 0)),
+    ("05/31/2024-14:15", (2024, 5, 31, 14, 15, 0)),
+    ("Sunday, March 6, 2016", dt!(2016, 3, 6)),
+    ("Sun., March 6, 2016", dt!(2016, 3, 6)),
+    ("Sunday, March, 6th 2016", dt!(2016, 3, 6)),
+    ("Tuesday 11/3/2015", dt!(2015, 11, 3)),
+    ("wed., 2024-01-03", dt!(2024, 1, 3)),
+    ("1 sept.", dt!(2026, 9, 1)),
+    ("sept. 1st", dt!(2026, 9, 1)),
+    ("the 22nd of october, 1987 at 7pm", (1987, 10, 22, 19, 0, 0)),
+    ("9pm on the 4th of july", (2026, 7, 4, 21, 0, 0)),
+    ("the 3rd", dt!(2026, 10, 3)),
+    ("thirteen of february", dt!(2026, 2, 13)),
+    ("August 10, 8 AD", dt!(8, 8, 10)),
+    ("10 August 2555 BE", dt!(2012, 8, 10)),
+    ("Thu Oct 26 11:00:09 2023", (2023, 10, 26, 11, 0, 9)),
+    ("Wed Jan  1 00:00:00 1997 1 year", dt!(1998, 1, 1)),
+  ]);
+}
+
+#[test]
+fn durations() {
+  execute_tests(&[
+    ("5 days from now", (2026, 10, 20, 9, 30, 0)),
+    ("12 hrs from now", (2026, 10, 15, 21, 30, 0)),
+    ("half an hour from now", (2026, 10, 15, 10, 0, 0)),
+    ("2 days later", (2026, 10, 17, 9, 30, 0)),
+    ("3mo later", (2027, 1, 15, 9, 30, 0)),
+    ("15 minute out", (2026, 10, 15, 9, 45, 0)),
+    ("2 months hence", (2026, 12, 15, 9, 30, 0)),
+    ("next week hence", (2026, 10, 22, 9, 30, 0)),
+    ("15 minutes earlier", (2026, 10, 15, 9, 15, 0)),
+    ("a min before", (2026, 10, 15, 9, 29, 0)),
+    ("the min after", (2026, 10, 15, 9, 31, 0)),
+    ("within 3 days", (2026, 10, 18, 9, 30, 0)),
+    ("within half an hour", (2026, 10, 15, 10, 0, 0)),
+    ("In about ~5 hours", (2026, 10, 15, 14, 30, 0)),
+    ("after an hour", (2026, 10, 15, 10, 30, 0)),
+    ("for 5 minutes 30 seconds", (2026, 10, 15, 9, 35, 30)),
+    (
+      "for 1 hour, 5 minutes, and 30 seconds",
+      (2026, 10, 15, 10, 35, 30),
+    ),
+    ("1 day 21 hours ago", (2026, 10, 13, 12, 30, 0)),
+    ("3m 49s ago", (2026, 10, 15, 9, 26, 11)),
+    ("2 days and 6 hours ago", (2026, 10, 13, 3, 30, 0)),
+    ("in 20 hours and 40 minutes", (2026, 10, 16, 6, 10, 0)),
+    ("in 1d, 2hr, and 5min", (2026, 10, 16, 11, 35, 0)),
+    ("next 2 weeks 3 days", (2026, 11, 1, 9, 30, 0)),
+    ("+2 months, 5 days", (2026, 12, 20, 9, 30, 0)),
+    ("-2 hours 5 minutes", (2026, 10, 15, 7, 25, 0)),
+    ("past 2 days", (2026, 10, 13, 9, 30, 0)),
+    ("fortnight", (2026, 10, 29, 9, 30, 0)),
+    ("2 fortnights ago", (2026, 9, 17, 9, 30, 0)),
+    ("1mth", (2026, 11, 15, 9, 30, 0)),
+    ("7 hrs", (2026, 10, 15, 16, 30, 0)),
+    ("-2yrs", (2024, 10, 15, 9, 30, 0)),
+    ("next qtr", (2027, 1, 15, 9, 30, 0)),
+    ("1 year ago 1 month", (2025, 11, 15, 9, 30, 0)),
+  ]);
+}
+
+#[test]
+fn relative_anchors() {
+  execute_tests(&[
+    ("the day before yesterday", (2026, 10, 13, 9, 30, 0)),
+    ("the day after tomorrow", (2026, 10, 17, 9, 30, 0)),
+    ("2 day before yesterday", (2026, 10, 12, 9, 30, 0)),
+    ("a week after tomorrow", (2026, 10, 23, 9, 30, 0)),
+    ("2 days after next Friday", dt!(2026, 10, 18)),
+    ("2 months before 02/02", dt!(2025, 12, 2)),
+    ("end of July", dt!(2026, 7, 31)),
+    ("last day of February 2024", dt!(2024, 2, 29)),
+    ("end of October next year", dt!(2027, 10, 31)),
+    ("end of the month", dt!(2026, 10, 31)),
+    ("end of month", dt!(2026, 10, 31)),
+    ("end of next month", dt!(2026, 11, 30)),
+    ("last day of last month", dt!(2026, 9, 30)),
+    ("end of this week", dt!(2026, 10, 18)),
+    ("end of next week", dt!(2026, 10, 25)),
+    ("end of this year", dt!(2026, 12, 31)),
+    ("end of the past year", dt!(2025, 12, 31)),
+    ("this week", (2026, 10, 15, 9, 30, 0)),
+    ("this month", (2026, 10, 15, 9, 30, 0)),
+    ("lastmonth", (2026, 9, 15, 9, 30, 0)),
+    ("past week", (2026, 10, 8, 9, 30, 0)),
+    // "this" is the week day of the current week
+    ("this tuesday", dt!(2026, 10, 13)),
+    ("this friday", dt!(2026, 10, 16)),
+    ("past Friday", dt!(2026, 10, 9)),
+    ("past thursday", dt!(2026, 10, 8)),
+    ("Friday of next week", dt!(2026, 10, 23)),
+    ("Tuesday of last week", dt!(2026, 10, 6)),
+    ("Wednesday of this week", dt!(2026, 10, 14)),
+    ("on Friday next week", dt!(2026, 10, 23)),
+    ("on Tuesday, next week", dt!(2026, 10, 20)),
+    ("Friday of next week at 9am", (2026, 10, 23, 9, 0, 0)),
+    ("Wed 2026-08-17 next week", dt!(2026, 8, 24)),
+    ("this weekend", dt!(2026, 10, 17)),
+    ("next weekend", dt!(2026, 10, 24)),
+    ("last weekend", dt!(2026, 10, 10)),
+    ("next weekday", dt!(2026, 10, 16)),
+    ("last weekday", dt!(2026, 10, 14)),
+  ]);
+}
+
+#[test]
+fn timezones_and_timestamps() {
+  execute_tests(&[
+    ("@1613371067", (2021, 2, 15, 6, 37, 47)),
+    ("@-1", (1969, 12, 31, 23, 59, 59)),
+    ("@ - 1234567890", (1930, 11, 18, 0, 28, 30)),
+    // A timezone without a time means midnight in that timezone
+    ("UTC", dt!(2026, 10, 15)),
+    ("cst", (2026, 10, 15, 6, 0, 0)),
+    ("ist", (2026, 10, 14, 18, 30, 0)),
+    ("mez", (2026, 10, 14, 23, 0, 0)),
+    ("UTC+07:00", (2026, 10, 14, 17, 0, 0)),
+    ("Z+0015", (2026, 10, 14, 23, 45, 0)),
+    ("utc +5:30", (2026, 10, 14, 18, 30, 0)),
+    ("UTC +8 years", (2034, 10, 15, 9, 30, 0)),
+    (
+      "september 16, 2020 at 11 am utc+02:45",
+      (2020, 9, 16, 8, 15, 0),
+    ),
+    (
+      "september 16, 2020 at 11 am GMT -08:45",
+      (2020, 9, 16, 19, 45, 0),
+    ),
+    ("september 16, 2020 at 23.00+14", (2020, 9, 16, 9, 0, 0)),
+    (
+      "september 16, 2020 at 11 am GMT+0900 (JST)",
+      (2020, 9, 16, 2, 0, 0),
+    ),
+    ("10:30 (gmt-2:30)", (2026, 10, 15, 13, 0, 0)),
+    ("Thu Oct 26 11:00:09 EDT 2023", (2023, 10, 26, 15, 0, 9)),
+    ("Wednesday, September 16, 2020, EST", (2020, 9, 16, 5, 0, 0)),
+    ("in 1 hour GMT", (2026, 10, 15, 10, 30, 0)),
+    (
+      "TZ=\"Europe/Paris\" 2025-01-02 03:04:05",
+      (2025, 1, 2, 2, 4, 5),
+    ),
+    ("TZ=\"EST5\" 1970-01-01 12:30:45", (1970, 1, 1, 17, 30, 45)),
+    ("TZ=\"UTC0\" 1970-01-01 00:00", dt!(1970, 1, 1)),
+    (
+      "TZ=\"Australia/Perth\" 2016-08-15 07:00",
+      (2016, 8, 14, 23, 0, 0),
+    ),
+  ]);
+}
+
+#[test]
+fn two_digit_years() {
+  execute_tests(&[
+    ("Aug 9 96", dt!(1996, 8, 9)),
+    ("03 Aug 96", dt!(1996, 8, 3)),
+    ("3rd Feb 82", dt!(1982, 2, 3)),
+    ("21-APR-16", dt!(2016, 4, 21)),
+    ("8/10/12", dt!(2012, 8, 10)),
+  ]);
 }

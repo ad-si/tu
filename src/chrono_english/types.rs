@@ -9,15 +9,27 @@ pub enum Direction {
   Next,
   Last,
   Here,
+  /// The current week, month, or year (e.g. "this friday", "this month")
+  This,
 }
 
 impl Direction {
   pub fn from_name(s: &str) -> Option<Direction> {
     use Direction::*;
     match s {
-      "next" => Some(Next),
-      "last" => Some(Last),
+      "next" | "coming" | "upcoming" => Some(Next),
+      "last" | "past" | "previous" | "prev" => Some(Last),
+      "this" => Some(This),
       _ => None,
+    }
+  }
+
+  /// Offset relative to the current week, month, or year
+  pub fn offset(self) -> i64 {
+    match self {
+      Direction::Next => 1,
+      Direction::Last => -1,
+      Direction::Here | Direction::This => 0,
     }
   }
 }
@@ -49,6 +61,16 @@ pub enum ByName {
   WeekDay(NamedDate),
   MonthName(NamedDate),
   DayMonth(YearDate),
+  /// Week day in a week relative to the current one
+  /// (e.g. "friday of next week", "this tuesday")
+  WeekDayInWeek {
+    week_day: u32,
+    weeks: i64,
+  },
+  /// Next or previous Monday to Friday (e.g. "next weekday")
+  BusinessDay(Direction),
+  /// Day of the current month (e.g. "the 3rd")
+  DayOfMonth(u32),
 }
 
 fn add_days<Tz: TimeZone>(
@@ -80,7 +102,15 @@ fn next_last_direction<T: PartialOrd>(
 impl ByName {
   pub fn from_name(s: &str, direct: Direction) -> Option<ByName> {
     Some(if let Some(wd) = week_day(s) {
-      ByName::WeekDay(NamedDate::new(direct, wd))
+      if direct == Direction::This {
+        ByName::WeekDayInWeek {
+          week_day: wd,
+          weeks: 0,
+        }
+      }
+      else {
+        ByName::WeekDay(NamedDate::new(direct, wd))
+      }
     }
     else {
       let mn = month_name(s)?;
@@ -151,10 +181,30 @@ impl ByName {
               0
             }
           }
+          Direction::This => 0,
         };
         let date = add_days(base, diff_days + 7 * shift_weeks)?;
         ts.to_date_time(date.date())
       }
+      ByName::WeekDayInWeek { week_day, weeks } => {
+        let this_day = base.weekday().num_days_from_monday() as i64;
+        let diff_days = *week_day as i64 - this_day + 7 * weeks;
+        ts.to_date_time(add_days(base, diff_days)?.date())
+      }
+      ByName::BusinessDay(direct) => {
+        let step = if *direct == Direction::Last { -1 } else { 1 };
+        let mut date = add_days(base, step)?;
+        while date.weekday().num_days_from_monday() >= 5 {
+          date = add_days(date, step)?;
+        }
+        ts.to_date_time(date.date())
+      }
+      ByName::DayOfMonth(day) => ts.to_date_time(
+        base
+          .timezone()
+          .ymd_opt(this_year, base.month(), *day)
+          .single()?,
+      ),
       ByName::MonthName(ref nd) => {
         let mut date =
           base.timezone().ymd_opt(this_year, nd.unit, 1).single()?;
@@ -293,11 +343,53 @@ impl Skip {
   }
 }
 
+/// Calendar period whose last day can be requested (e.g. "end of the month")
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Period {
+  Week,
+  Month,
+  Year,
+}
+
+impl Period {
+  pub fn from_interval(unit: Interval) -> Option<Period> {
+    match unit {
+      Interval::Days(7) => Some(Period::Week),
+      Interval::Months(1) => Some(Period::Month),
+      Interval::Months(12) => Some(Period::Year),
+      _ => None,
+    }
+  }
+
+  /// Last day of the period containing the given date
+  fn last_day<Tz: TimeZone>(self, date: Date<Tz>) -> Option<Date<Tz>> {
+    let tz = date.timezone();
+    match self {
+      Period::Week => {
+        let days_left = 6 - date.weekday().num_days_from_monday() as i64;
+        date.checked_add_signed(Duration::days(days_left))
+      }
+      Period::Month => {
+        let (year, month) = if date.month() == 12 {
+          (date.year() + 1, 1)
+        }
+        else {
+          (date.year(), date.month() + 1)
+        };
+        tz.ymd_opt(year, month, 1).single()?.pred_opt()
+      }
+      Period::Year => tz.ymd_opt(date.year(), 12, 31).single(),
+    }
+  }
+}
+
 #[derive(Debug)]
 pub enum DateSpec {
   Absolute(AbsDate), // Y M D (e.g. 2018-06-02, 4 July 2017)
   Relative(Skip),    // n U (e.g. 2min, 3 years ago, -2d)
   FromName(ByName),  // (e.g. 'next fri', 'jul')
+  /// Last day of the period containing a date (e.g. "end of next month")
+  EndOf(Box<DateSpec>, Period),
 }
 
 impl DateSpec {
@@ -331,6 +423,10 @@ impl DateSpec {
       Absolute(ref ad) => ts.to_date_time(ad.to_date(base)?),
       Relative(ref skip) => skip.to_date_time(base, ts), // might need time
       FromName(ref byname) => byname.to_date_time(base, ts, american),
+      EndOf(ref spec, period) => {
+        let date = spec.to_date_time(base, TimeSpec::new_empty(), american)?;
+        ts.to_date_time(period.last_day(date.date())?)
+      }
     }
   }
 }
@@ -495,6 +591,16 @@ pub fn month_name(s: &str) -> Option<u32> {
 
 pub fn time_unit(s: &str) -> Option<Interval> {
   use Interval::*;
+  // Abbreviations which aren't prefixes of the full name
+  match s {
+    "mo" | "mos" | "mth" | "mths" => return Some(Months(1)),
+    "hr" | "hrs" => return Some(Seconds(60 * 60)),
+    "wk" | "wks" => return Some(Days(7)),
+    "yr" | "yrs" => return Some(Months(12)),
+    "q" | "qr" | "qtr" | "qtrs" => return Some(Months(3)),
+    "fortnight" | "fortnights" => return Some(Days(14)),
+    _ => {}
+  }
   let name = if s.len() < 3 {
     match &s[0..1] {
       "s" => "sec",

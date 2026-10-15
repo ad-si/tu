@@ -3,7 +3,8 @@
 //!
 //! `tests/corpus.tsv` columns:
 //! - `source`: Library the case was taken from
-//! - `status`: `pass` (supported) or `todo` (not yet supported / wrong result)
+//! - `status`: `pass` (supported), `todo` (not yet supported / wrong result),
+//!   or `differs` (tu deliberately deviates from the source library)
 //! - `input`: Input string (split on whitespace like CLI arguments)
 //! - `now`: Reference time (UTC)
 //! - `expected`: Expected UTC time or `ERROR` if the input must be rejected
@@ -93,7 +94,7 @@ fn corpus_supported_cases() {
 #[test]
 fn corpus_todo_cases_do_not_panic() {
   let panics: Vec<String> = cases()
-    .filter(|case| case.status == "todo")
+    .filter(|case| case.status != "pass")
     .filter_map(|case| {
       let args: Vec<String> =
         case.input.split_whitespace().map(String::from).collect();

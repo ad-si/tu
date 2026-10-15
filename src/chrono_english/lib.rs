@@ -100,7 +100,9 @@ pub fn parse_duration(s: &str) -> DateResult<Interval> {
 
   match d.date.unwrap() {
     DateSpec::Absolute(_) => date_result("unexpected absolute date"),
-    DateSpec::FromName(_) => date_result("unexpected date component"),
+    DateSpec::FromName(_) | DateSpec::EndOf(..) => {
+      date_result("unexpected date component")
+    }
     DateSpec::Relative(skip) => Ok(skip.to_interval()),
   }
 }

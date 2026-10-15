@@ -84,10 +84,10 @@ chrono-node	pass	5 Days ago	2012-08-10T00:00:00	2012-08-05T00:00:00
 chrono-node	pass	5 months ago	2012-10-10T00:00:00	2012-05-10T00:00:00
 chrono-node	pass	5 years ago	2012-08-10T00:00:00	2007-08-10T00:00:00
 chrono-node	pass	5 minutes ago	2012-08-10T12:14:00	2012-08-10T12:09:00
-chrono-node	pass	5hr before	2012-08-10T12:14:00	ERROR
+chrono-node	differs	5hr before	2012-08-10T12:14:00	ERROR
 chrono-node	pass	2 days ago	2024-09-10T12:00:00	2024-09-08T12:00:00
 chrono-node	pass	2 weeks ago	2024-09-10T12:00:00	2024-08-27T12:00:00
-chrono-node	pass	15 hours 29 min	2024-01-01T00:00:00	ERROR
+chrono-node	differs	15 hours 29 min	2024-01-01T00:00:00	ERROR
 chrono-node	pass	am ago	2024-01-01T00:00:00	ERROR
 chrono-node	pass	them ago	2024-01-01T00:00:00	ERROR
 chrono-node	pass	next 2 weeks	2016-10-01T12:00:00	2016-10-15T12:00:00
@@ -97,8 +97,8 @@ chrono-node	pass	+am	2024-01-01T00:00:00	ERROR
 chrono-node	pass	+them	2024-01-01T00:00:00	ERROR
 chrono-node	pass	in 1 hour	2012-08-10T12:14:00	2012-08-10T13:14:00
 chrono-node	pass	in 1.5 hours	2012-08-10T12:40:00	2012-08-10T14:10:00
-chrono-node	pass	15m from now	2024-01-01T00:00:00	ERROR
-chrono-node	pass	15s later	2024-01-01T00:00:00	ERROR
+chrono-node	differs	15m from now	2024-01-01T00:00:00	ERROR
+chrono-node	differs	15s later	2024-01-01T00:00:00	ERROR
 chrono-node	pass	tell them later	2024-01-01T00:00:00	ERROR
 chrono-node	pass	in 5 days	2012-08-10T00:00:00	2012-08-15T00:00:00
 chrono-node	pass	in 5 minutes	2012-08-10T12:14:00	2012-08-10T12:19:00
@@ -977,7 +977,7 @@ risboo-when	pass	3 march	2019-01-01T00:00:00	2019-03-03T00:00:00
 risboo-when	pass	december	2019-01-01T00:00:00	2019-12-01T00:00:00
 risboo-when	pass	twenty fourteen of april	2019-01-01T00:00:00	ERROR
 risboo-when	pass	31st february	2019-01-01T00:00:00	ERROR
-risboo-when	pass	this monday	2019-01-01T00:00:01	ERROR
+risboo-when	differs	this monday	2019-01-01T00:00:01	ERROR
 risboo-when	pass	Today 21:50	2018-08-03T15:34:56	2018-08-03T21:50:00
 risboo-when	pass	yesterday   5a.m.	2018-08-03T15:34:56	2018-08-02T05:00:00
 risboo-when	pass	11p.m.	2019-01-01T00:00:00	2019-01-01T23:00:00
@@ -1029,36 +1029,36 @@ chrono-node	todo	2014-04-18 13:00 - 16:00	2024-01-01T00:00:00	2014-04-18T13:00:0
 chrono-node	todo	3:30-4:30pm	2020-07-06T00:00:00	2020-07-06T15:30:00
 chrono-node	todo	November 1,2001- March 31,2002	2024-01-01T00:00:00	2001-11-01T12:00:00
 chrono-node	todo	Thursday, December 15, 2011	2024-01-01T00:00:00	2011-12-15T12:00:00
-chrono-node	todo	SUN 15SEP 11:05 AM - 12:50 PM	2024-01-01T00:00:00	2024-09-15T11:05:00
-chrono-node	todo	FRI 13SEP 1:29 PM - FRI 13SEP 3:29 PM	2024-01-01T00:00:00	2024-09-13T13:29:00
+chrono-node	pass	SUN 15SEP 11:05 AM - 12:50 PM	2024-01-01T00:00:00	2024-09-15T11:05:00
+chrono-node	pass	FRI 13SEP 1:29 PM - FRI 13SEP 3:29 PM	2024-01-01T00:00:00	2024-09-13T13:29:00
 chrono-node	todo	9:00 AM to 5:00 PM, Tuesday, 20 May 2013	2024-01-01T00:00:00	2013-05-20T09:00:00
 chrono-node	todo	Monday afternoon to last night	2017-07-07T00:00:00	2017-07-03T15:00:00
-chrono-node	todo	07-27-2022, 02:00 AM	2017-07-07T00:00:00	2022-07-27T02:00:00
+chrono-node	pass	07-27-2022, 02:00 AM	2017-07-07T00:00:00	2022-07-27T02:00:00
 chrono-node	todo	Sunday, October 16, 2011	2012-08-10T00:00:00	2011-10-16T12:00:00
 chrono-node	todo	last night	2012-08-10T12:00:00	2012-08-09T00:00:00
-chrono-node	todo	this morning	2012-08-10T12:00:00	2012-08-10T06:00:00
-chrono-node	todo	this afternoon	2012-08-10T12:00:00	2012-08-10T15:00:00
+chrono-node	pass	this morning	2012-08-10T12:00:00	2012-08-10T06:00:00
+chrono-node	pass	this afternoon	2012-08-10T12:00:00	2012-08-10T15:00:00
 chrono-node	todo	this evening	2012-08-10T12:00:00	2012-08-10T20:00:00
-chrono-node	todo	midnight	2012-08-10T12:00:00	2012-08-11T00:00:00
+chrono-node	pass	midnight	2012-08-10T12:00:00	2012-08-11T00:00:00
 chrono-node	todo	midnight	2012-08-10T01:00:00	2012-08-10T00:00:00
-chrono-node	todo	Tomorrow at noon	2012-08-10T14:00:00	2012-08-11T12:00:00
+chrono-node	pass	Tomorrow at noon	2012-08-10T14:00:00	2012-08-11T12:00:00
 chrono-node	todo	today - next friday	2012-08-04T12:00:00	2012-08-04T12:00:00
 chrono-node	todo	today - next friday	2012-08-10T12:00:00	2012-08-10T12:00:00
-chrono-node	todo	today morning to tomorrow	2012-08-04T12:00:00	2012-08-04T06:00:00
+chrono-node	pass	today morning to tomorrow	2012-08-04T12:00:00	2012-08-04T06:00:00
 chrono-node	todo	today to tomorrow afternoon	2012-08-04T12:00:00	2012-08-04T12:00:00
 chrono-node	todo	tonight	2012-01-01T12:00:00	2012-01-01T22:00:00
-chrono-node	todo	tonight 8pm	2012-01-01T12:00:00	2012-01-01T20:00:00
-chrono-node	todo	tonight at 8	2012-01-01T12:00:00	2012-01-01T20:00:00
-chrono-node	todo	tomorrow before 4pm	2012-01-01T12:00:00	2012-01-02T16:00:00
-chrono-node	todo	tomorrow after 4pm	2012-01-01T12:00:00	2012-01-02T16:00:00
+chrono-node	pass	tonight 8pm	2012-01-01T12:00:00	2012-01-01T20:00:00
+chrono-node	pass	tonight at 8	2012-01-01T12:00:00	2012-01-01T20:00:00
+chrono-node	pass	tomorrow before 4pm	2012-01-01T12:00:00	2012-01-02T16:00:00
+chrono-node	pass	tomorrow after 4pm	2012-01-01T12:00:00	2012-01-02T16:00:00
 chrono-node	todo	this evening	2016-10-01T00:00:00	2016-10-01T20:00:00
-chrono-node	todo	yesterday afternoon	2016-10-01T00:00:00	2016-09-30T15:00:00
-chrono-node	todo	tomorrow morning	2016-10-01T08:00:00	2016-10-02T06:00:00
-chrono-node	todo	this afternoon at 3	2016-10-01T08:00:00	2016-10-01T15:00:00
-chrono-node	todo	at midnight on 12th August	2012-08-10T15:00:00	2012-08-12T00:00:00
-chrono-node	todo	Jan 1, 2020 Morning UTC	2024-01-01T00:00:00	2020-01-01T06:00:00
+chrono-node	pass	yesterday afternoon	2016-10-01T00:00:00	2016-09-30T15:00:00
+chrono-node	pass	tomorrow morning	2016-10-01T08:00:00	2016-10-02T06:00:00
+chrono-node	pass	this afternoon at 3	2016-10-01T08:00:00	2016-10-01T15:00:00
+chrono-node	pass	at midnight on 12th August	2012-08-10T15:00:00	2012-08-12T00:00:00
+chrono-node	pass	Jan 1, 2020 Morning UTC	2024-01-01T00:00:00	2020-01-01T06:00:00
 chrono-node	todo	Jan 1, 2020 Evening JST	2024-01-01T00:00:00	2020-01-01T11:00:00
-chrono-node	todo	2 weeks after yesterday	2022-02-02T00:00:00	2022-02-15T00:00:00
+chrono-node	pass	2 weeks after yesterday	2022-02-02T00:00:00	2022-02-15T00:00:00
 chrono-node	todo	2 months before 02/02	2022-02-02T00:00:00	2021-12-02T12:00:00
 chrono-node	todo	2 days after next Friday	2022-02-02T00:00:00	2022-02-13T12:00:00
 chrono-node	todo	September 2012	2024-01-01T00:00:00	2012-09-01T12:00:00
@@ -1158,15 +1158,15 @@ chrono-node	todo	30-12-16	2024-01-01T00:00:00	2016-12-30T12:00:00
 chrono-node	todo	Friday 30-12-16	2024-01-01T00:00:00	2016-12-30T12:00:00
 chrono-node	todo	8/Oct/2012	2012-08-10T00:00:00	2012-10-08T12:00:00
 chrono-node	todo	06/Nov/2023	2024-01-01T00:00:00	2023-11-06T12:00:00
-chrono-node	todo	06/Nov/2023:06:36:02	2024-01-01T00:00:00	2023-11-06T06:36:02
-chrono-node	todo	06/Nov/2023:06:36:02 +0200	2024-01-01T00:00:00	2023-11-06T04:36:02
+chrono-node	pass	06/Nov/2023:06:36:02	2024-01-01T00:00:00	2023-11-06T06:36:02
+chrono-node	pass	06/Nov/2023:06:36:02 +0200	2024-01-01T00:00:00	2023-11-06T04:36:02
 chrono-node	todo	06/2004	2012-08-10T00:00:00	2004-06-01T12:00:00
 chrono-node	todo	6/2018	2018-01-01T00:00:00	2018-06-01T12:00:00
 chrono-node	todo	16/6/2018	2018-01-01T00:00:00	2018-06-16T12:00:00
 chrono-node	todo	7/2019	2018-01-01T00:00:00	2019-07-01T12:00:00
 chrono-node	todo	8/10/2012 - 8/15/2012	2012-08-10T00:00:00	2012-08-10T12:00:00
 chrono-node	todo	from 01/21/2021 10:00 to 01/01/2023 07:00	2012-08-10T00:00:00	2021-01-21T10:00:00
-chrono-node	todo	08/08/2023, 09:15 AM to 08/29/2023, 09:15 AM	2012-08-10T00:00:00	2023-08-08T09:15:00
+chrono-node	pass	08/08/2023, 09:15 AM to 08/29/2023, 09:15 AM	2012-08-10T00:00:00	2023-08-08T09:15:00
 chrono-node	todo	2015/05/25	2024-01-01T00:00:00	2015-05-25T12:00:00
 chrono-node	todo	2015.05.25	2024-01-01T00:00:00	2015-05-25T12:00:00
 chrono-node	todo	05-25-2015	2024-01-01T00:00:00	2015-05-25T12:00:00
@@ -1174,7 +1174,7 @@ chrono-node	todo	05.25.2015	2024-01-01T00:00:00	2015-05-25T12:00:00
 chrono-node	todo	/05/25/2015	2024-01-01T00:00:00	2015-05-25T12:00:00
 chrono-node	todo	25/05/2015	2024-01-01T00:00:00	2015-05-25T12:00:00
 chrono-node	todo	14/4 90	2012-08-10T00:00:00	2012-04-14T12:00:00
-chrono-node	todo	this week	2017-11-19T12:00:00	2017-11-19T12:00:00
+chrono-node	pass	this week	2017-11-19T12:00:00	2017-11-19T12:00:00
 chrono-node	todo	this month	2017-11-19T12:00:00	2017-11-01T12:00:00
 chrono-node	todo	this year	2017-11-19T12:00:00	2017-01-01T12:00:00
 chrono-node	todo	end of the month	2012-08-10T00:00:00	2012-08-31T12:00:00
@@ -1193,100 +1193,100 @@ chrono-node	todo	end of next month	2023-01-31T15:00:00	2023-02-28T12:00:00
 chrono-node	todo	end of last month	2023-12-31T15:00:00	2023-11-30T12:00:00
 chrono-node	todo	end of this year	2020-11-22T15:00:00	2020-12-31T12:00:00
 chrono-node	todo	end of the past year	2020-11-22T15:00:00	2019-12-31T12:00:00
-chrono-node	todo	lastmonth	2016-10-01T12:00:00	2016-09-01T12:00:00
-chrono-node	todo	past week	2016-10-01T12:00:00	2016-09-24T12:00:00
-chrono-node	todo	next qtr	2021-10-22T12:00:00	2022-01-22T12:00:00
+chrono-node	pass	lastmonth	2016-10-01T12:00:00	2016-09-01T12:00:00
+chrono-node	pass	past week	2016-10-01T12:00:00	2016-09-24T12:00:00
+chrono-node	pass	next qtr	2021-10-22T12:00:00	2022-01-22T12:00:00
 chrono-node	todo	after this year	2020-11-22T12:11:32	2021-11-22T12:11:32
 chrono-node	todo	Connect back after this year	2022-04-16T12:00:00	2023-04-16T12:00:00
-chrono-node	todo	1 at night	2016-10-01T08:00:00	2016-10-01T01:00:00
-chrono-node	todo	1 in the afternoon	2016-10-01T08:00:00	2016-10-01T13:00:00
-chrono-node	todo	05/31/2024.14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
-chrono-node	todo	05/31/2024:14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
-chrono-node	todo	05/31/2024-14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
+chrono-node	pass	1 at night	2016-10-01T08:00:00	2016-10-01T01:00:00
+chrono-node	pass	1 in the afternoon	2016-10-01T08:00:00	2016-10-01T13:00:00
+chrono-node	pass	05/31/2024.14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
+chrono-node	pass	05/31/2024:14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
+chrono-node	pass	05/31/2024-14:15	2016-10-01T08:00:00	2024-05-31T14:15:00
 chrono-node	todo	10:00:00 - 21:45:00	2016-10-01T08:00:00	2016-10-01T10:00:00
-chrono-node	todo	11 at night	2016-10-01T08:00:00	2016-10-01T23:00:00
-chrono-node	todo	11 tonight	2016-10-01T08:00:00	2016-10-01T23:00:00
-chrono-node	todo	6 in the morning	2016-10-01T08:00:00	2016-10-01T06:00:00
-chrono-node	todo	6 in the afternoon	2016-10-01T08:00:00	2016-10-01T18:00:00
+chrono-node	pass	11 at night	2016-10-01T08:00:00	2016-10-01T23:00:00
+chrono-node	pass	11 tonight	2016-10-01T08:00:00	2016-10-01T23:00:00
+chrono-node	pass	6 in the morning	2016-10-01T08:00:00	2016-10-01T06:00:00
+chrono-node	pass	6 in the afternoon	2016-10-01T08:00:00	2016-10-01T18:00:00
 chrono-node	todo	10 - 11 at night	2016-10-01T08:00:00	2016-10-01T22:00:00
 chrono-node	todo	8 - 11pm	2016-10-01T08:00:00	2016-10-01T20:00:00
 chrono-node	todo	7 - 8	2016-10-01T08:00:00	2016-10-01T07:00:00
 chrono-node	todo	11am to 1am	2016-10-01T12:00:00	2016-10-02T11:00:00
 chrono-node	todo	10am to 12pm	2016-10-01T11:00:00	2016-10-02T10:00:00
-chrono-node	todo	15 minute earlier	2012-08-10T12:14:00	2012-08-10T11:59:00
-chrono-node	todo	15 minute before	2012-08-10T12:14:00	2012-08-10T11:59:00
-chrono-node	todo	a min before	2012-08-10T12:14:00	2012-08-10T12:13:00
-chrono-node	todo	the min before	2012-08-10T12:14:00	2012-08-10T12:13:00
-chrono-node	todo	15 hours 29 min ago	2012-08-10T22:30:00	2012-08-10T07:01:00
-chrono-node	todo	1 day 21 hours ago	2012-08-10T22:30:00	2012-08-09T01:30:00
-chrono-node	todo	1d 21 h 25m ago	2012-08-10T22:30:00	2012-08-09T01:05:00
-chrono-node	todo	3 min 49 sec ago	2012-08-10T22:30:00	2012-08-10T22:26:11
-chrono-node	todo	3m 49s ago	2012-08-10T22:30:00	2012-08-10T22:26:11
-chrono-node	todo	2 day before today	2012-08-10T00:00:00	2012-08-08T00:00:00
-chrono-node	todo	the day before yesterday	2012-08-10T00:00:00	2012-08-08T00:00:00
-chrono-node	todo	2 day before yesterday	2012-08-10T00:00:00	2012-08-07T00:00:00
-chrono-node	todo	a week before yesterday	2012-08-10T00:00:00	2012-08-02T00:00:00
+chrono-node	pass	15 minute earlier	2012-08-10T12:14:00	2012-08-10T11:59:00
+chrono-node	pass	15 minute before	2012-08-10T12:14:00	2012-08-10T11:59:00
+chrono-node	pass	a min before	2012-08-10T12:14:00	2012-08-10T12:13:00
+chrono-node	pass	the min before	2012-08-10T12:14:00	2012-08-10T12:13:00
+chrono-node	pass	15 hours 29 min ago	2012-08-10T22:30:00	2012-08-10T07:01:00
+chrono-node	pass	1 day 21 hours ago	2012-08-10T22:30:00	2012-08-09T01:30:00
+chrono-node	pass	1d 21 h 25m ago	2012-08-10T22:30:00	2012-08-09T01:05:00
+chrono-node	pass	3 min 49 sec ago	2012-08-10T22:30:00	2012-08-10T22:26:11
+chrono-node	pass	3m 49s ago	2012-08-10T22:30:00	2012-08-10T22:26:11
+chrono-node	pass	2 day before today	2012-08-10T00:00:00	2012-08-08T00:00:00
+chrono-node	pass	the day before yesterday	2012-08-10T00:00:00	2012-08-08T00:00:00
+chrono-node	pass	2 day before yesterday	2012-08-10T00:00:00	2012-08-07T00:00:00
+chrono-node	pass	a week before yesterday	2012-08-10T00:00:00	2012-08-02T00:00:00
 chrono-node	todo	5 days	2024-01-01T00:00:00	ERROR
-chrono-node	todo	next 2 weeks 3 days	2016-10-01T12:00:00	2016-10-18T12:00:00
-chrono-node	todo	after a year	2016-10-01T12:00:00	2017-10-01T12:00:00
-chrono-node	todo	after an hour	2016-10-01T15:00:00	2016-10-01T16:00:00
-chrono-node	todo	past 2 days	2016-10-01T12:00:00	2016-09-29T12:00:00
-chrono-node	todo	+2 months, 5 days	2016-10-01T12:00:00	2016-12-06T12:00:00
+chrono-node	pass	next 2 weeks 3 days	2016-10-01T12:00:00	2016-10-18T12:00:00
+chrono-node	pass	after a year	2016-10-01T12:00:00	2017-10-01T12:00:00
+chrono-node	pass	after an hour	2016-10-01T15:00:00	2016-10-01T16:00:00
+chrono-node	pass	past 2 days	2016-10-01T12:00:00	2016-09-29T12:00:00
+chrono-node	pass	+2 months, 5 days	2016-10-01T12:00:00	2016-12-06T12:00:00
 chrono-node	todo	-2hr5min	2016-10-01T12:00:00	2016-10-01T09:55:00
 chrono-node	todo	-5d 00	2016-10-01T12:00:00	2016-09-26T00:00:00
-chrono-node	todo	-2 hours 5 minutes	2016-10-01T12:00:00	2016-10-01T09:55:00
-chrono-node	todo	2 days later	2012-08-10T12:00:00	2012-08-12T12:00:00
-chrono-node	todo	5 minutes later	2012-08-10T10:00:00	2012-08-10T10:05:00
-chrono-node	todo	3 week later	2012-07-10T10:00:00	2012-07-31T10:00:00
-chrono-node	todo	3w later	2012-07-10T10:00:00	2012-07-31T10:00:00
-chrono-node	todo	3mo later	2012-07-10T10:00:00	2012-10-10T10:00:00
-chrono-node	todo	5 days from now	2012-08-10T00:00:00	2012-08-15T00:00:00
-chrono-node	todo	10 days from now	2012-08-10T00:00:00	2012-08-20T00:00:00
-chrono-node	todo	15 minute from now	2012-08-10T12:14:00	2012-08-10T12:29:00
-chrono-node	todo	15 minutes earlier	2012-08-10T12:14:00	2012-08-10T11:59:00
-chrono-node	todo	15 minute out	2012-08-10T12:14:00	2012-08-10T12:29:00
-chrono-node	todo	12 hours from now	2012-08-10T12:14:00	2012-08-11T00:14:00
-chrono-node	todo	12 hrs from now	2012-08-10T12:14:00	2012-08-11T00:14:00
-chrono-node	todo	half an hour from now	2012-08-10T12:14:00	2012-08-10T12:44:00
-chrono-node	todo	12 seconds from now	2012-08-10T12:14:00	2012-08-10T12:14:12
-chrono-node	todo	three seconds from now	2012-08-10T12:14:00	2012-08-10T12:14:03
-chrono-node	todo	5 Days from now	2012-08-10T00:00:00	2012-08-15T00:00:00
-chrono-node	todo	half An hour from now	2012-08-10T12:14:00	2012-08-10T12:44:00
-chrono-node	todo	A days from now	2012-08-10T00:00:00	2012-08-11T00:00:00
-chrono-node	todo	a min out	2012-08-10T12:14:00	2012-08-10T12:15:00
-chrono-node	todo	in 1d 2hr 5min	2012-08-10T12:40:00	2012-08-11T14:45:00
-chrono-node	todo	in 1d, 2hr, and 5min	2012-08-10T12:40:00	2012-08-11T14:45:00
-chrono-node	todo	the min after	2012-08-10T12:14:00	2012-08-10T12:15:00
-chrono-node	todo	15 minutes from now	2012-08-10T12:14:00	2012-08-10T12:29:00
-chrono-node	todo	25 minutes later	2012-08-10T12:40:00	2012-08-10T13:05:00
-chrono-node	todo	2 day after today	2012-08-10T00:00:00	2012-08-12T00:00:00
-chrono-node	todo	the day after tomorrow	2012-08-10T00:00:00	2012-08-12T00:00:00
-chrono-node	todo	2 day after tomorrow	2012-08-10T00:00:00	2012-08-13T00:00:00
-chrono-node	todo	a week after tomorrow	2012-08-10T00:00:00	2012-08-18T00:00:00
+chrono-node	pass	-2 hours 5 minutes	2016-10-01T12:00:00	2016-10-01T09:55:00
+chrono-node	pass	2 days later	2012-08-10T12:00:00	2012-08-12T12:00:00
+chrono-node	pass	5 minutes later	2012-08-10T10:00:00	2012-08-10T10:05:00
+chrono-node	pass	3 week later	2012-07-10T10:00:00	2012-07-31T10:00:00
+chrono-node	pass	3w later	2012-07-10T10:00:00	2012-07-31T10:00:00
+chrono-node	pass	3mo later	2012-07-10T10:00:00	2012-10-10T10:00:00
+chrono-node	pass	5 days from now	2012-08-10T00:00:00	2012-08-15T00:00:00
+chrono-node	pass	10 days from now	2012-08-10T00:00:00	2012-08-20T00:00:00
+chrono-node	pass	15 minute from now	2012-08-10T12:14:00	2012-08-10T12:29:00
+chrono-node	pass	15 minutes earlier	2012-08-10T12:14:00	2012-08-10T11:59:00
+chrono-node	pass	15 minute out	2012-08-10T12:14:00	2012-08-10T12:29:00
+chrono-node	pass	12 hours from now	2012-08-10T12:14:00	2012-08-11T00:14:00
+chrono-node	pass	12 hrs from now	2012-08-10T12:14:00	2012-08-11T00:14:00
+chrono-node	pass	half an hour from now	2012-08-10T12:14:00	2012-08-10T12:44:00
+chrono-node	pass	12 seconds from now	2012-08-10T12:14:00	2012-08-10T12:14:12
+chrono-node	pass	three seconds from now	2012-08-10T12:14:00	2012-08-10T12:14:03
+chrono-node	pass	5 Days from now	2012-08-10T00:00:00	2012-08-15T00:00:00
+chrono-node	pass	half An hour from now	2012-08-10T12:14:00	2012-08-10T12:44:00
+chrono-node	pass	A days from now	2012-08-10T00:00:00	2012-08-11T00:00:00
+chrono-node	pass	a min out	2012-08-10T12:14:00	2012-08-10T12:15:00
+chrono-node	pass	in 1d 2hr 5min	2012-08-10T12:40:00	2012-08-11T14:45:00
+chrono-node	pass	in 1d, 2hr, and 5min	2012-08-10T12:40:00	2012-08-11T14:45:00
+chrono-node	pass	the min after	2012-08-10T12:14:00	2012-08-10T12:15:00
+chrono-node	pass	15 minutes from now	2012-08-10T12:14:00	2012-08-10T12:29:00
+chrono-node	pass	25 minutes later	2012-08-10T12:40:00	2012-08-10T13:05:00
+chrono-node	pass	2 day after today	2012-08-10T00:00:00	2012-08-12T00:00:00
+chrono-node	pass	the day after tomorrow	2012-08-10T00:00:00	2012-08-12T00:00:00
+chrono-node	pass	2 day after tomorrow	2012-08-10T00:00:00	2012-08-13T00:00:00
+chrono-node	pass	a week after tomorrow	2012-08-10T00:00:00	2012-08-18T00:00:00
 chrono-node	todo	next tuesday +10 days	2023-12-29T00:00:00	2024-01-12T12:00:00
 chrono-node	todo	2023-12-29 -10days	2023-12-29T00:00:00	2023-12-19T12:00:00
-chrono-node	todo	within 10 day	2012-08-10T00:00:00	2012-08-20T00:00:00
-chrono-node	todo	for 5 minutes	2012-08-10T12:14:00	2012-08-10T12:19:00
-chrono-node	todo	within 1 hour	2012-08-10T12:14:00	2012-08-10T13:14:00
-chrono-node	todo	within half an hour	2012-08-10T12:14:00	2012-08-10T12:44:00
+chrono-node	pass	within 10 day	2012-08-10T00:00:00	2012-08-20T00:00:00
+chrono-node	pass	for 5 minutes	2012-08-10T12:14:00	2012-08-10T12:19:00
+chrono-node	pass	within 1 hour	2012-08-10T12:14:00	2012-08-10T13:14:00
+chrono-node	pass	within half an hour	2012-08-10T12:14:00	2012-08-10T12:44:00
 chrono-node	todo	in half a quarter	2012-08-10T12:14:00	2012-09-24T12:14:00
-chrono-node	todo	within two weeks	2012-08-10T12:14:00	2012-08-24T12:14:00
-chrono-node	todo	within a month	2012-08-10T12:14:00	2012-09-10T12:14:00
-chrono-node	todo	within a few months	2012-07-10T12:14:00	2012-10-10T12:14:00
-chrono-node	todo	within one year	2012-08-10T12:14:00	2013-08-10T12:14:00
-chrono-node	todo	within one Year	2012-08-10T12:14:00	2013-08-10T12:14:00
-chrono-node	todo	within One year	2012-08-10T12:14:00	2013-08-10T12:14:00
-chrono-node	todo	In around 5 hours	2016-10-01T13:00:00	2016-10-01T18:00:00
-chrono-node	todo	In about ~5 hours	2016-10-01T13:00:00	2016-10-01T18:00:00
-chrono-node	todo	for 5 minutes 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
-chrono-node	todo	for 5 minutes, 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
-chrono-node	todo	for 5 minutes and 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
-chrono-node	todo	for 1 hour, 5 minutes, 30 seconds	2012-08-10T12:14:00	2012-08-10T13:19:30
-chrono-node	todo	for 1 hour, 5 minutes, and 30 seconds	2012-08-10T12:14:00	2012-08-10T13:19:30
-chrono-node	todo	In  about 5 hours	2012-08-10T12:49:00	2012-08-10T17:49:00
-chrono-node	todo	within around 3 hours	2012-08-10T12:49:00	2012-08-10T15:49:00
-chrono-node	todo	within 12 month	2016-10-01T14:52:00	2017-10-01T14:52:00
-chrono-node	todo	within 3 days	2016-10-01T14:52:00	2016-10-04T14:52:00
+chrono-node	pass	within two weeks	2012-08-10T12:14:00	2012-08-24T12:14:00
+chrono-node	pass	within a month	2012-08-10T12:14:00	2012-09-10T12:14:00
+chrono-node	pass	within a few months	2012-07-10T12:14:00	2012-10-10T12:14:00
+chrono-node	pass	within one year	2012-08-10T12:14:00	2013-08-10T12:14:00
+chrono-node	pass	within one Year	2012-08-10T12:14:00	2013-08-10T12:14:00
+chrono-node	pass	within One year	2012-08-10T12:14:00	2013-08-10T12:14:00
+chrono-node	pass	In around 5 hours	2016-10-01T13:00:00	2016-10-01T18:00:00
+chrono-node	pass	In about ~5 hours	2016-10-01T13:00:00	2016-10-01T18:00:00
+chrono-node	pass	for 5 minutes 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
+chrono-node	pass	for 5 minutes, 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
+chrono-node	pass	for 5 minutes and 30 seconds	2012-08-10T12:14:00	2012-08-10T12:19:30
+chrono-node	pass	for 1 hour, 5 minutes, 30 seconds	2012-08-10T12:14:00	2012-08-10T13:19:30
+chrono-node	pass	for 1 hour, 5 minutes, and 30 seconds	2012-08-10T12:14:00	2012-08-10T13:19:30
+chrono-node	pass	In  about 5 hours	2012-08-10T12:49:00	2012-08-10T17:49:00
+chrono-node	pass	within around 3 hours	2012-08-10T12:49:00	2012-08-10T15:49:00
+chrono-node	pass	within 12 month	2016-10-01T14:52:00	2017-10-01T14:52:00
+chrono-node	pass	within 3 days	2016-10-01T14:52:00	2016-10-04T14:52:00
 chrono-node	todo	past Friday	2012-08-09T00:00:00	2012-08-03T12:00:00
 chrono-node	todo	on Friday next week	2015-04-18T00:00:00	2015-04-24T12:00:00
 chrono-node	todo	on Tuesday, next week	2015-04-18T00:00:00	2015-04-21T12:00:00
@@ -1315,7 +1315,7 @@ chrono-node	todo	last weekday	2024-10-18T12:00:00	2024-10-17T12:00:00
 chrono-node	todo	next weekday	2024-10-18T12:00:00	2024-10-21T12:00:00
 chrono-node	todo	last weekday	2024-10-19T12:00:00	2024-10-18T12:00:00
 chrono-node	todo	next weekday	2024-10-19T12:00:00	2024-10-21T12:00:00
-chrono-node	todo	on Tuesday morning	2015-04-18T00:00:00	2015-04-21T06:00:00
+chrono-node	pass	on Tuesday morning	2015-04-18T00:00:00	2015-04-21T06:00:00
 chrono-node	todo	Sunday, December 7, 2014	2012-08-09T00:00:00	2014-12-07T12:00:00
 chrono-node	todo	Sunday 12/7/2014	2012-08-09T00:00:00	2014-12-07T12:00:00
 chrono-node	todo	Friday to Monday	2023-04-09T00:00:00	2023-04-07T12:00:00
@@ -1327,17 +1327,17 @@ chrono-node	todo	Tuesday of last week	2022-08-02T00:00:00	2022-07-26T12:00:00
 chrono-node	todo	Friday of last week	2022-08-02T00:00:00	2022-07-29T12:00:00
 chrono-node	todo	Wednesday of this week	2022-08-02T00:00:00	2022-08-03T12:00:00
 chrono-node	todo	Tuesday of this week	2022-08-02T00:00:00	2022-08-02T12:00:00
-chrono-node	todo	Tuesday of next week after 2pm	2022-08-02T00:00:00	2022-08-09T14:00:00
-chrono-node	todo	Friday of next week at 9am	2022-08-02T00:00:00	2022-08-12T09:00:00
+chrono-node	pass	Tuesday of next week after 2pm	2022-08-02T00:00:00	2022-08-09T14:00:00
+chrono-node	pass	Friday of next week at 9am	2022-08-02T00:00:00	2022-08-12T09:00:00
 chrono-node	todo	on Tuesday of next week	2022-08-02T00:00:00	2022-08-09T12:00:00
 chrono-node	todo	this Friday to this Monday	2016-08-04T00:00:00	2016-08-05T12:00:00
-chrono-node	todo	sunday morning	2021-08-15T20:00:00	2021-08-22T06:00:00
+chrono-node	pass	sunday morning	2021-08-15T20:00:00	2021-08-22T06:00:00
 chrono-node	todo	monday - friday	2019-06-13T00:00:00	2019-06-17T12:00:00
 chrono-node	todo	10 August 88 CE	2012-08-10T00:00:00	0088-08-10T12:00:00
 chrono-node	todo	10 August 88 AD	2012-08-10T00:00:00	0088-08-10T12:00:00
 chrono-node	todo	10 August 2555 BE	2012-08-10T00:00:00	2012-08-10T12:00:00
-chrono-node	todo	Thu Oct 26 11:00:09 2023	2016-10-01T08:00:00	2023-10-26T11:00:09
-chrono-node	todo	Thu Oct 26 11:00:09 EDT 2023	2016-10-01T08:00:00	2023-10-26T15:00:09
+chrono-node	pass	Thu Oct 26 11:00:09 2023	2016-10-01T08:00:00	2023-10-26T11:00:09
+chrono-node	pass	Thu Oct 26 11:00:09 EDT 2023	2016-10-01T08:00:00	2023-10-26T15:00:09
 chrono-node	todo	Thu Oct 26 - 28, 11:00:09 2023	2016-10-01T08:00:00	2023-10-26T11:00:09
 chrono-node	todo	Thu Oct 26, 10:00 - 11:00:09 2023	2016-10-01T08:00:00	2023-10-26T10:00:00
 chrono-node	todo	2012/8/10	2012-08-10T00:00:00	2012-08-10T12:00:00
@@ -1350,24 +1350,24 @@ chrono-node	todo	2012/aug/10	2012-08-10T00:00:00	2012-08-10T12:00:00
 chrono-node	todo	2018 March 18	2012-08-10T00:00:00	2018-03-18T12:00:00
 chrono-node	todo	2024/13/1	2012-08-10T00:00:00	2024-01-13T12:00:00
 chrono-node	todo	2024-13-01	2012-08-10T00:00:00	2024-01-13T12:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am utc+02:45	2024-01-01T00:00:00	2020-09-16T08:15:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am utc+0245	2024-01-01T00:00:00	2020-09-16T08:15:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am utc+02	2024-01-01T00:00:00	2020-09-16T09:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 23.00+14	2024-01-01T00:00:00	2020-09-16T09:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 23.00+1400	2024-01-01T00:00:00	2020-09-16T09:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am GMT -08:45	2024-01-01T00:00:00	2020-09-16T19:45:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am gmt+02	2024-01-01T00:00:00	2020-09-16T09:00:00
-chrono-node	todo	10:30 (gmt-2:30)	2024-01-01T00:00:00	2024-01-01T13:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am	2024-01-01T00:00:00	2020-09-16T11:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am JST	2024-01-01T00:00:00	2020-09-16T02:00:00
-chrono-node	todo	wednesday, september 16, 2020 at 11 am GMT+0900 (JST)	2024-01-01T00:00:00	2020-09-16T02:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am utc+02:45	2024-01-01T00:00:00	2020-09-16T08:15:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am utc+0245	2024-01-01T00:00:00	2020-09-16T08:15:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am utc+02	2024-01-01T00:00:00	2020-09-16T09:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 23.00+14	2024-01-01T00:00:00	2020-09-16T09:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 23.00+1400	2024-01-01T00:00:00	2020-09-16T09:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am GMT -08:45	2024-01-01T00:00:00	2020-09-16T19:45:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am gmt+02	2024-01-01T00:00:00	2020-09-16T09:00:00
+chrono-node	pass	10:30 (gmt-2:30)	2024-01-01T00:00:00	2024-01-01T13:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am	2024-01-01T00:00:00	2020-09-16T11:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am JST	2024-01-01T00:00:00	2020-09-16T02:00:00
+chrono-node	pass	wednesday, september 16, 2020 at 11 am GMT+0900 (JST)	2024-01-01T00:00:00	2020-09-16T02:00:00
 chrono-node	todo	2022-03-27 23:00 CET	2024-01-01T00:00:00	2022-03-27T21:00:00
 chrono-node	todo	2021-03-28 23:00 CET	2024-01-01T00:00:00	2021-03-28T21:00:00
 chrono-node	todo	2022-10-29 23:00 CET	2024-01-01T00:00:00	2022-10-29T21:00:00
 chrono-node	todo	2021-10-30 23:00 CET	2024-01-01T00:00:00	2021-10-30T21:00:00
 chrono-node	todo	Wednesday, September 16, 2020, EST	2024-01-01T00:00:00	2020-09-16T17:00:00
-chrono-node	todo	in 1 hour GMT	2020-11-29T04:24:13	2020-11-29T05:24:13
-chrono-node	todo	2 hour later	2021-11-23T13:32:23	2021-11-23T15:32:23
+chrono-node	pass	in 1 hour GMT	2020-11-29T04:24:13	2020-11-29T05:24:13
+chrono-node	pass	2 hour later	2021-11-23T13:32:23	2021-11-23T15:32:23
 fuzzy-time	todo	1-1	2024-01-01T00:00:00	2025-01-01T00:00:00
 fuzzy-time	todo	01-1	2024-01-01T00:00:00	2025-01-01T00:00:00
 fuzzy-time	todo	jan-1	2024-01-01T00:00:00	2025-01-01T00:00:00
@@ -1379,40 +1379,40 @@ fuzzy-time	todo	tues-1	2024-01-01T00:00:00	2023-12-26T00:00:00
 fuzzy-time	todo	wed+20	2024-01-01T00:00:00	2024-05-22T00:00:00
 fuzzy-time	todo	8:	2024-01-01T00:00:00	2024-01-01T08:00:00
 fuzzy-time	todo	09:	2024-01-01T00:00:00	2024-01-01T09:00:00
-fuzzy-time	todo	evening	2024-01-01T00:00:00	2024-01-01T18:00:00
+fuzzy-time	pass	evening	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	thu 11:	2024-01-01T00:00:00	2024-01-04T11:00:00
 fuzzy-time	todo	8 05:06	2024-01-01T00:00:00	2024-01-08T05:06:00
 fuzzy-time	todo	02-07 05:06	2024-01-01T00:00:00	2024-02-07T05:06:00
 fuzzy-time	todo	noo	2024-01-01T00:00:00	2024-01-01T12:00:00
-fuzzy-time	todo	noon	2024-01-01T00:00:00	2024-01-01T12:00:00
+fuzzy-time	pass	noon	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	Noo	2024-01-01T00:00:00	2024-01-01T12:00:00
-fuzzy-time	todo	Noon	2024-01-01T00:00:00	2024-01-01T12:00:00
+fuzzy-time	pass	Noon	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	midd	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	midda	2024-01-01T00:00:00	2024-01-01T12:00:00
-fuzzy-time	todo	midday	2024-01-01T00:00:00	2024-01-01T12:00:00
+fuzzy-time	pass	midday	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	Midd	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	Midda	2024-01-01T00:00:00	2024-01-01T12:00:00
-fuzzy-time	todo	Midday	2024-01-01T00:00:00	2024-01-01T12:00:00
+fuzzy-time	pass	Midday	2024-01-01T00:00:00	2024-01-01T12:00:00
 fuzzy-time	todo	midn	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	midni	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	midnig	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	midnigh	2024-01-01T00:00:00	2024-01-02T00:00:00
-fuzzy-time	todo	midnight	2024-01-01T00:00:00	2024-01-02T00:00:00
+fuzzy-time	pass	midnight	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	Midn	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	Midni	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	Midnig	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	Midnigh	2024-01-01T00:00:00	2024-01-02T00:00:00
-fuzzy-time	todo	Midnight	2024-01-01T00:00:00	2024-01-02T00:00:00
+fuzzy-time	pass	Midnight	2024-01-01T00:00:00	2024-01-02T00:00:00
 fuzzy-time	todo	mor	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	morn	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	morni	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	mornin	2024-01-01T00:00:00	2024-01-01T06:00:00
-fuzzy-time	todo	morning	2024-01-01T00:00:00	2024-01-01T06:00:00
+fuzzy-time	pass	morning	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	Mor	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	Morn	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	Morni	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	Mornin	2024-01-01T00:00:00	2024-01-01T06:00:00
-fuzzy-time	todo	Morning	2024-01-01T00:00:00	2024-01-01T06:00:00
+fuzzy-time	pass	Morning	2024-01-01T00:00:00	2024-01-01T06:00:00
 fuzzy-time	todo	e	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	ev	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	eve	2024-01-01T00:00:00	2024-01-01T18:00:00
@@ -1425,7 +1425,7 @@ fuzzy-time	todo	Eve	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	Even	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	Eveni	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	Evenin	2024-01-01T00:00:00	2024-01-01T18:00:00
-fuzzy-time	todo	Evening	2024-01-01T00:00:00	2024-01-01T18:00:00
+fuzzy-time	pass	Evening	2024-01-01T00:00:00	2024-01-01T18:00:00
 fuzzy-time	todo	0506:23	2024-01-01T00:00:00	2024-01-01T05:06:23
 fuzzy-time	todo	+7m	2024-01-01T00:00:00	2024-07-29T00:00:00
 fuzzy-time	todo	6:	2024-01-01T00:00:00	2024-01-01T06:00:00
@@ -1455,9 +1455,9 @@ fuzzy-time	todo	12-3	2024-01-01T00:00:00	2024-12-03T00:00:00
 fuzzy-time	todo	02-13	2024-01-01T00:00:00	2024-02-13T00:00:00
 fuzzy-time	todo	12-03	2024-01-01T00:00:00	2024-12-03T00:00:00
 fuzzy-time	todo	02-03	2024-01-01T00:00:00	2024-02-03T00:00:00
-fuzzy-time	todo	oCT-01	2024-01-01T00:00:00	2024-10-01T00:00:00
-fuzzy-time	todo	Nov-02	2024-01-01T00:00:00	2024-11-02T00:00:00
-fuzzy-time	todo	dec-03	2024-01-01T00:00:00	2024-12-03T00:00:00
+fuzzy-time	pass	oCT-01	2024-01-01T00:00:00	2024-10-01T00:00:00
+fuzzy-time	pass	Nov-02	2024-01-01T00:00:00	2024-11-02T00:00:00
+fuzzy-time	pass	dec-03	2024-01-01T00:00:00	2024-12-03T00:00:00
 fuzzy-time	todo	m	2024-01-01T00:00:00	2024-01-08T00:00:00
 fuzzy-time	todo	mo	2024-01-01T00:00:00	2024-01-08T00:00:00
 fuzzy-time	todo	mon	2024-01-01T00:00:00	2024-01-08T00:00:00
@@ -1484,26 +1484,26 @@ fuzzy-time	todo	sa	2024-01-01T00:00:00	2024-01-06T00:00:00
 fuzzy-time	todo	Sa	2024-01-01T00:00:00	2024-01-06T00:00:00
 fuzzy-time	todo	su	2024-01-01T00:00:00	2024-01-07T00:00:00
 fuzzy-time	todo	Su	2024-01-01T00:00:00	2024-01-07T00:00:00
-olebedev-when	todo	tonight at 11:10 pm	2016-01-06T00:00:00	2016-01-06T23:10:00
-olebedev-when	todo	Friday afternoon	2016-01-06T00:00:00	2016-01-08T15:00:00
+olebedev-when	pass	tonight at 11:10 pm	2016-01-06T00:00:00	2016-01-06T23:10:00
+olebedev-when	pass	Friday afternoon	2016-01-06T00:00:00	2016-01-08T15:00:00
 olebedev-when	todo	next tuesday at 2p	2016-01-06T00:00:00	2016-01-12T14:00:00
-olebedev-when	todo	tonight	2016-01-06T00:00:00	2016-01-06T23:00:00
+olebedev-when	pass	tonight	2016-01-06T00:00:00	2016-01-06T23:00:00
 olebedev-when	todo	this morning	2016-01-06T00:00:00	2016-01-06T08:00:00
-olebedev-when	todo	this noon	2016-01-06T00:00:00	2016-01-06T12:00:00
-olebedev-when	todo	this afternoon	2016-01-06T00:00:00	2016-01-06T15:00:00
-olebedev-when	todo	this evening	2016-01-06T00:00:00	2016-01-06T18:00:00
-olebedev-when	todo	tomorrow this afternoon	2016-01-06T00:00:00	2016-01-07T15:00:00
-olebedev-when	todo	within half an hour	2016-01-06T00:00:00	2016-01-06T00:30:00
-olebedev-when	todo	within 1 hour	2016-01-06T00:00:00	2016-01-06T01:00:00
-olebedev-when	todo	within 10 days	2016-01-06T00:00:00	2016-01-16T00:00:00
-olebedev-when	todo	within two weeks	2016-01-06T00:00:00	2016-01-20T00:00:00
-olebedev-when	todo	within a month	2016-01-06T00:00:00	2016-02-06T00:00:00
-olebedev-when	todo	within a few months	2016-01-06T00:00:00	2016-04-06T00:00:00
-olebedev-when	todo	within one year	2016-01-06T00:00:00	2017-01-06T00:00:00
-olebedev-when	todo	within half a year	2016-10-06T00:00:00	2017-04-06T00:00:00
-olebedev-when	todo	1 sept.	2016-01-06T00:00:00	2016-09-01T00:00:00
-olebedev-when	todo	sept. 1st	2016-01-06T00:00:00	2016-09-01T00:00:00
-olebedev-when	todo	jan. 4	2016-01-06T00:00:00	2016-01-04T00:00:00
+olebedev-when	pass	this noon	2016-01-06T00:00:00	2016-01-06T12:00:00
+olebedev-when	pass	this afternoon	2016-01-06T00:00:00	2016-01-06T15:00:00
+olebedev-when	pass	this evening	2016-01-06T00:00:00	2016-01-06T18:00:00
+olebedev-when	pass	tomorrow this afternoon	2016-01-06T00:00:00	2016-01-07T15:00:00
+olebedev-when	pass	within half an hour	2016-01-06T00:00:00	2016-01-06T00:30:00
+olebedev-when	pass	within 1 hour	2016-01-06T00:00:00	2016-01-06T01:00:00
+olebedev-when	pass	within 10 days	2016-01-06T00:00:00	2016-01-16T00:00:00
+olebedev-when	pass	within two weeks	2016-01-06T00:00:00	2016-01-20T00:00:00
+olebedev-when	pass	within a month	2016-01-06T00:00:00	2016-02-06T00:00:00
+olebedev-when	pass	within a few months	2016-01-06T00:00:00	2016-04-06T00:00:00
+olebedev-when	pass	within one year	2016-01-06T00:00:00	2017-01-06T00:00:00
+olebedev-when	pass	within half a year	2016-10-06T00:00:00	2017-04-06T00:00:00
+olebedev-when	pass	1 sept.	2016-01-06T00:00:00	2016-09-01T00:00:00
+olebedev-when	pass	sept. 1st	2016-01-06T00:00:00	2016-09-01T00:00:00
+olebedev-when	pass	jan. 4	2016-01-06T00:00:00	2016-01-04T00:00:00
 olebedev-when	todo	5-59 pm	2016-01-06T00:00:00	2016-01-06T17:59:00
 olebedev-when	todo	17-59	2016-01-06T00:00:00	2016-01-06T17:59:00
 olebedev-when	todo	5 P.	2016-01-06T00:00:00	2016-01-06T17:00:00
@@ -1511,82 +1511,82 @@ olebedev-when	todo	12 P.	2016-01-06T00:00:00	2016-01-06T12:00:00
 olebedev-when	todo	1 P.	2016-01-06T00:00:00	2016-01-06T13:00:00
 olebedev-when	todo	5A	2016-01-06T00:00:00	2016-01-06T05:00:00
 olebedev-when	todo	5A.	2016-01-06T00:00:00	2016-01-06T05:00:00
-olebedev-when	todo	past Monday	2016-01-06T00:00:00	2016-01-04T00:00:00
-olebedev-when	todo	past saturday	2016-01-06T00:00:00	2016-01-02T00:00:00
-olebedev-when	todo	past friday	2016-01-06T00:00:00	2016-01-01T00:00:00
-olebedev-when	todo	past wednesday	2016-01-06T00:00:00	2015-12-30T00:00:00
-olebedev-when	todo	past tuesday	2016-01-06T00:00:00	2016-01-05T00:00:00
-olebedev-when	todo	this tuesday	2016-01-06T00:00:00	2016-01-05T00:00:00
-olebedev-when	todo	this wednesday	2016-01-06T00:00:00	2016-01-06T00:00:00
-olebedev-when	todo	this saturday	2016-01-06T00:00:00	2016-01-09T00:00:00
-olebedev-when	todo	29/2/2016	2016-07-15T00:00:00	2016-02-29T00:00:00
+olebedev-when	pass	past Monday	2016-01-06T00:00:00	2016-01-04T00:00:00
+olebedev-when	pass	past saturday	2016-01-06T00:00:00	2016-01-02T00:00:00
+olebedev-when	pass	past friday	2016-01-06T00:00:00	2016-01-01T00:00:00
+olebedev-when	pass	past wednesday	2016-01-06T00:00:00	2015-12-30T00:00:00
+olebedev-when	pass	past tuesday	2016-01-06T00:00:00	2016-01-05T00:00:00
+olebedev-when	pass	this tuesday	2016-01-06T00:00:00	2016-01-05T00:00:00
+olebedev-when	pass	this wednesday	2016-01-06T00:00:00	2016-01-06T00:00:00
+olebedev-when	pass	this saturday	2016-01-06T00:00:00	2016-01-09T00:00:00
+olebedev-when	pass	29/2/2016	2016-07-15T00:00:00	2016-02-29T00:00:00
 olebedev-when	todo	28/2	2016-07-15T00:00:00	2017-02-28T00:00:00
-olebedev-when	todo	28/02/2017	2016-07-15T00:00:00	2017-02-28T00:00:00
-olebedev-when	todo	28/07	2016-07-15T00:00:00	2016-07-28T00:00:00
+olebedev-when	pass	28/02/2017	2016-07-15T00:00:00	2017-02-28T00:00:00
+olebedev-when	pass	28/07	2016-07-15T00:00:00	2016-07-28T00:00:00
 olebedev-when	todo	30/06	2016-07-15T00:00:00	2017-06-30T00:00:00
 olebedev-when	todo	14/07	2016-07-15T00:00:00	2017-07-14T00:00:00
-parse-human-relative-time	todo	noon	2019-03-31T01:59:00	2019-03-31T12:00:00
+parse-human-relative-time	pass	noon	2019-03-31T01:59:00	2019-03-31T12:00:00
 parse-human-relative-time	todo	midnight	2019-03-31T01:59:00	2019-03-31T00:00:00
-parse-human-relative-time	todo	tomorrow at 7	2019-03-31T01:59:00	2019-04-01T07:00:00
-parse-human-relative-time	todo	yesterday at 7	2019-03-31T01:59:00	2019-03-30T07:00:00
+parse-human-relative-time	pass	tomorrow at 7	2019-03-31T01:59:00	2019-04-01T07:00:00
+parse-human-relative-time	pass	yesterday at 7	2019-03-31T01:59:00	2019-03-30T07:00:00
 parse-human-relative-time	todo	august 25th 2015	2019-03-31T01:59:00	2015-08-25T01:59:00
 parse-human-relative-time	todo	1st of Jan 2020	2019-03-31T01:59:00	2020-01-01T01:59:00
 parse-human-relative-time	todo	30th of August	2019-03-31T01:59:00	2019-08-30T01:59:00
 parse-human-relative-time	todo	this friday	2019-03-31T01:59:00	2019-03-29T01:59:00
-parse-human-relative-time	todo	in 20 hours 40 minutes	2019-03-31T01:59:00	2019-03-31T22:39:00
-parse-human-relative-time	todo	in 20 hours and 40 minutes	2019-03-31T01:59:00	2019-03-31T22:39:00
-parse-human-relative-time	todo	in 2 years and 5 weeks	2019-03-31T01:59:00	2021-05-05T01:59:00
-parse-messy-time	todo	tomorrow at 7	2024-01-01T00:00:00	2024-01-02T07:00:00
-parse-messy-time	todo	this friday	2015-04-14T09:46:01	2015-04-17T00:00:00
-parse-messy-time	todo	this friday	2015-04-22T09:52:43	2015-04-24T00:00:00
-parse-messy-time	todo	the 22nd of october, 1987 at 7pm	2024-01-01T00:00:00	1987-10-22T19:00:00
-parse-messy-time	todo	9pm on the 4th of july	2015-04-14T09:46:01	2015-07-04T21:00:00
-parse-messy-time	todo	in 20 hours 40 minutes	2015-04-14T09:46:01	2015-04-15T06:26:01
-parse-messy-time	todo	in 20 hours and 40 minutes	2015-04-14T09:46:01	2015-04-15T06:26:01
-parse-messy-time	todo	in 2 years and 5 weeks	2015-04-14T09:46:01	2017-05-19T09:46:01
-parse-messy-time	todo	2 days and 6 hours ago	2015-04-14T09:46:01	2015-04-12T03:46:01
-parse-messy-time	todo	the 1st	2015-04-14T09:46:01	2015-04-01T00:00:00
-parse-messy-time	todo	the 2nd	2015-04-14T09:46:01	2015-04-02T00:00:00
-parse-messy-time	todo	the 3rd	2015-04-14T09:46:01	2015-04-03T00:00:00
-parse-messy-time	todo	the 4th	2015-04-14T09:46:01	2015-04-04T00:00:00
-parse-messy-time	todo	the 10th	2015-04-14T09:46:01	2015-04-10T00:00:00
-parse-messy-time	todo	tomorrow at noon	2015-04-14T09:46:01	2015-04-15T12:00:00
-parse-messy-time	todo	in 6 days at midnight	2015-04-14T09:46:01	2015-04-20T00:00:00
-parse-messy-time	todo	this sunday	2016-05-31T00:00:00	2016-06-05T00:00:00
-parse_datetime	todo	14-november-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	14-nov-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	14-november	2022-06-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	14-nov	2022-06-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	TZ="EST5" 1970-01-01 00:00	2020-06-15T12:00:00	1970-01-01T05:00:00
-parse_datetime	todo	TZ="PST8" 1970-01-01 00:00	2020-06-15T12:00:00	1970-01-01T08:00:00
-parse_datetime	todo	TZ="UTC" 1970-01-01 12:00	2020-06-15T12:00:00	1970-01-01T12:00:00
-parse_datetime	todo	TZ="Europe/Paris" 2025-01-02 03:04:05	2020-06-15T12:00:00	2025-01-02T02:04:05
-parse_datetime	todo	TZ="UTC0" 1970-01-01 00:00	2024-01-01T00:00:00	1970-01-01T00:00:00
-parse_datetime	todo	TZ="EST5" 1970-01-01 12:30:45	2024-01-01T00:00:00	1970-01-01T17:30:45
-parse_datetime	todo	TZ="America/New_York" 1970-01-01 00:00	2024-01-01T00:00:00	1970-01-01T05:00:00
-parse_datetime	todo	TZ="Australia/Perth" 2016-08-15 07:00	2024-01-01T00:00:00	2016-08-14T23:00:00
+parse-human-relative-time	pass	in 20 hours 40 minutes	2019-03-31T01:59:00	2019-03-31T22:39:00
+parse-human-relative-time	pass	in 20 hours and 40 minutes	2019-03-31T01:59:00	2019-03-31T22:39:00
+parse-human-relative-time	pass	in 2 years and 5 weeks	2019-03-31T01:59:00	2021-05-05T01:59:00
+parse-messy-time	pass	tomorrow at 7	2024-01-01T00:00:00	2024-01-02T07:00:00
+parse-messy-time	pass	this friday	2015-04-14T09:46:01	2015-04-17T00:00:00
+parse-messy-time	pass	this friday	2015-04-22T09:52:43	2015-04-24T00:00:00
+parse-messy-time	pass	the 22nd of october, 1987 at 7pm	2024-01-01T00:00:00	1987-10-22T19:00:00
+parse-messy-time	pass	9pm on the 4th of july	2015-04-14T09:46:01	2015-07-04T21:00:00
+parse-messy-time	pass	in 20 hours 40 minutes	2015-04-14T09:46:01	2015-04-15T06:26:01
+parse-messy-time	pass	in 20 hours and 40 minutes	2015-04-14T09:46:01	2015-04-15T06:26:01
+parse-messy-time	pass	in 2 years and 5 weeks	2015-04-14T09:46:01	2017-05-19T09:46:01
+parse-messy-time	pass	2 days and 6 hours ago	2015-04-14T09:46:01	2015-04-12T03:46:01
+parse-messy-time	pass	the 1st	2015-04-14T09:46:01	2015-04-01T00:00:00
+parse-messy-time	pass	the 2nd	2015-04-14T09:46:01	2015-04-02T00:00:00
+parse-messy-time	pass	the 3rd	2015-04-14T09:46:01	2015-04-03T00:00:00
+parse-messy-time	pass	the 4th	2015-04-14T09:46:01	2015-04-04T00:00:00
+parse-messy-time	pass	the 10th	2015-04-14T09:46:01	2015-04-10T00:00:00
+parse-messy-time	pass	tomorrow at noon	2015-04-14T09:46:01	2015-04-15T12:00:00
+parse-messy-time	pass	in 6 days at midnight	2015-04-14T09:46:01	2015-04-20T00:00:00
+parse-messy-time	pass	this sunday	2016-05-31T00:00:00	2016-06-05T00:00:00
+parse_datetime	pass	14-november-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	14-nov-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	14-november	2022-06-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	14-nov	2022-06-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	TZ="EST5" 1970-01-01 00:00	2020-06-15T12:00:00	1970-01-01T05:00:00
+parse_datetime	pass	TZ="PST8" 1970-01-01 00:00	2020-06-15T12:00:00	1970-01-01T08:00:00
+parse_datetime	pass	TZ="UTC" 1970-01-01 12:00	2020-06-15T12:00:00	1970-01-01T12:00:00
+parse_datetime	pass	TZ="Europe/Paris" 2025-01-02 03:04:05	2020-06-15T12:00:00	2025-01-02T02:04:05
+parse_datetime	pass	TZ="UTC0" 1970-01-01 00:00	2024-01-01T00:00:00	1970-01-01T00:00:00
+parse_datetime	pass	TZ="EST5" 1970-01-01 12:30:45	2024-01-01T00:00:00	1970-01-01T17:30:45
+parse_datetime	pass	TZ="America/New_York" 1970-01-01 00:00	2024-01-01T00:00:00	1970-01-01T05:00:00
+parse_datetime	pass	TZ="Australia/Perth" 2016-08-15 07:00	2024-01-01T00:00:00	2016-08-14T23:00:00
 parse_datetime	todo	1 year 1 month	2020-02-29T00:00:00	2021-04-01T00:00:00
 parse_datetime	todo	1 month 1 year	2024-01-31T00:00:00	2025-03-02T00:00:00
-parse_datetime	todo	2 months 1 day	2024-01-31T00:00:00	2024-04-01T00:00:00
+parse_datetime	pass	2 months 1 day	2024-01-31T00:00:00	2024-04-01T00:00:00
 parse_datetime	todo	1 year ago 1 month	2020-02-29T00:00:00	2019-04-01T00:00:00
-parse_datetime	todo	1 year 2 months 3 days 4 hours	2024-01-31T12:30:45	2025-04-03T16:30:45
-parse_datetime	todo	1970-01-01 UTC 1780318971 seconds	2020-06-15T12:00:00	2026-06-01T13:02:51
+parse_datetime	pass	1 year 2 months 3 days 4 hours	2024-01-31T12:30:45	2025-04-03T16:30:45
+parse_datetime	pass	1970-01-01 UTC 1780318971 seconds	2020-06-15T12:00:00	2026-06-01T13:02:51
 parse_datetime	todo	8j	2026-01-15T12:00:00	2026-01-15T08:00:00
 parse_datetime	todo	8z	2026-01-15T12:00:00	2026-01-15T08:00:00
 parse_datetime	todo	j 1 day	2026-08-29T11:30:45	2026-08-30T11:30:45
 parse_datetime	todo	5 minutes j	2026-08-29T11:30:45	2026-08-29T11:35:45
-parse_datetime	todo	utc 1 day	2026-08-29T11:30:45	2026-08-30T11:30:45
-parse_datetime	todo	5 minutes utc	2026-08-29T11:30:45	2026-08-29T11:35:45
+parse_datetime	pass	utc 1 day	2026-08-29T11:30:45	2026-08-30T11:30:45
+parse_datetime	pass	5 minutes utc	2026-08-29T11:30:45	2026-08-29T11:35:45
 parse_datetime	todo	j	2026-08-29T11:30:45	2026-08-29T00:00:00
 parse_datetime	todo	j monday	2026-08-29T11:30:45	2026-08-31T00:00:00
-parse_datetime	todo	utc	2026-08-29T11:30:45	2026-08-29T00:00:00
-parse_datetime	todo	Wed 2026-08-17 10:30	2026-10-01T12:00:00	2026-08-17T10:30:00
+parse_datetime	pass	utc	2026-08-29T11:30:45	2026-08-29T00:00:00
+parse_datetime	pass	Wed 2026-08-17 10:30	2026-10-01T12:00:00	2026-08-17T10:30:00
 parse_datetime	todo	third Wed 2026-08-17	2026-10-01T12:00:00	2026-08-17T00:00:00
 parse_datetime	todo	2 Wed 2026-08-17	2026-10-01T12:00:00	2026-08-17T00:00:00
-parse_datetime	todo	Sun Sep 25 12:00:00 AM UTC 2026	2026-10-01T12:00:00	2026-09-25T00:00:00
-parse_datetime	todo	Wed 2026-08-17 next week	2026-10-01T12:00:00	2026-08-24T00:00:00
+parse_datetime	pass	Sun Sep 25 12:00:00 AM UTC 2026	2026-10-01T12:00:00	2026-09-25T00:00:00
+parse_datetime	pass	Wed 2026-08-17 next week	2026-10-01T12:00:00	2026-08-24T00:00:00
 parse_datetime	todo	10000-01-31 +3 months	2000-01-01T00:00:00	10000-05-01T00:00:00
-parse_datetime	todo	TZ="Europe/Paris" 10000-01-01 -1000 years	2000-01-01T00:00:00	8999-12-31T23:00:00
+parse_datetime	pass	TZ="Europe/Paris" 10000-01-01 -1000 years	2000-01-01T00:00:00	8999-12-31T23:00:00
 parse_datetime	todo	10000-01-01 next monday 1 day 2 hours 3 minutes 4 seconds	2000-01-01T00:00:00	10000-01-02T02:03:04
 parse_datetime	todo	2021-01-31 1 month	2000-01-01T00:00:00	2021-03-03T00:00:00
 parse_datetime	todo	jul 18 12:30 10000	2024-01-01T00:00:00	10000-07-18T12:30:00
@@ -1610,92 +1610,92 @@ parse_datetime	todo	2024-02-29 1 year ago	2026-01-12T00:00:00	2023-03-01T00:00:0
 parse_datetime	todo	2024-01-31 1 months	2026-01-12T00:00:00	2024-03-02T00:00:00
 parse_datetime	todo	2024-03-31 1 months ago	2026-01-12T00:00:00	2024-03-02T00:00:00
 parse_datetime	todo	-1 second ago	2026-08-27T12:00:00	2026-08-27T12:00:01
-parse_datetime	todo	@1613371067	2024-01-01T00:00:00	2021-02-15T06:37:47
-parse_datetime	todo	UTC+07:00	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	UTC+0700	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	UTC+07	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	Z+07:00	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	Z+0700	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	Z+07	2024-01-01T00:00:00	2023-12-31T17:00:00
-parse_datetime	todo	UTC+00:15	2024-01-01T00:00:00	2023-12-31T23:45:00
-parse_datetime	todo	UTC+0015	2024-01-01T00:00:00	2023-12-31T23:45:00
-parse_datetime	todo	Z+00:15	2024-01-01T00:00:00	2023-12-31T23:45:00
-parse_datetime	todo	Z+0015	2024-01-01T00:00:00	2023-12-31T23:45:00
-parse_datetime	todo	@852076800	2024-01-01T00:00:00	1997-01-01T00:00:00
-parse_datetime	todo	Wed Jan  1 00:00:00 1997	2024-01-01T00:00:00	1997-01-01T00:00:00
-parse_datetime	todo	Wed Jan  1 00:00:00 1997 1 year	2024-01-01T00:00:00	1998-01-01T00:00:00
-parse_datetime	todo	19970101 +1 year	2024-01-01T00:00:00	1998-01-01T00:00:00
-parse_datetime	todo	ut	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	UT	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	gmt	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	GMT	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	@1613371067	2024-01-01T00:00:00	2021-02-15T06:37:47
+parse_datetime	pass	UTC+07:00	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	UTC+0700	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	UTC+07	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	Z+07:00	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	Z+0700	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	Z+07	2024-01-01T00:00:00	2023-12-31T17:00:00
+parse_datetime	pass	UTC+00:15	2024-01-01T00:00:00	2023-12-31T23:45:00
+parse_datetime	pass	UTC+0015	2024-01-01T00:00:00	2023-12-31T23:45:00
+parse_datetime	pass	Z+00:15	2024-01-01T00:00:00	2023-12-31T23:45:00
+parse_datetime	pass	Z+0015	2024-01-01T00:00:00	2023-12-31T23:45:00
+parse_datetime	pass	@852076800	2024-01-01T00:00:00	1997-01-01T00:00:00
+parse_datetime	pass	Wed Jan  1 00:00:00 1997	2024-01-01T00:00:00	1997-01-01T00:00:00
+parse_datetime	pass	Wed Jan  1 00:00:00 1997 1 year	2024-01-01T00:00:00	1998-01-01T00:00:00
+parse_datetime	pass	19970101 +1 year	2024-01-01T00:00:00	1998-01-01T00:00:00
+parse_datetime	pass	ut	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	UT	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	gmt	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	GMT	2024-01-01T00:00:00	2024-01-01T00:00:00
 parse_datetime	todo	eighth monday	2023-02-28T10:12:03	2023-04-24T00:00:00
-parse_datetime	todo	mon.	2023-02-28T10:12:03	2023-03-06T00:00:00
+parse_datetime	pass	mon.	2023-02-28T10:12:03	2023-03-06T00:00:00
 parse_datetime	todo	tue.	2023-02-28T10:12:03	2023-02-28T00:00:00
-parse_datetime	todo	wed.	2023-02-28T10:12:03	2023-03-01T00:00:00
-parse_datetime	todo	thu.	2023-02-28T10:12:03	2023-03-02T00:00:00
-parse_datetime	todo	fri.	2023-02-28T10:12:03	2023-03-03T00:00:00
-parse_datetime	todo	sat.	2023-02-28T10:12:03	2023-03-04T00:00:00
-parse_datetime	todo	sun.	2023-02-28T10:12:03	2023-03-05T00:00:00
-parse_datetime	todo	wed., 2024-01-03	2024-01-01T00:00:00	2024-01-03T00:00:00
-parse_datetime	todo	mon., 2024-01-03	2024-01-01T00:00:00	2024-01-03T00:00:00
-parse_datetime	todo	2 months hence	2026-01-15T12:00:00	2026-03-15T12:00:00
-parse_datetime	todo	year hence	2026-01-15T12:00:00	2027-01-15T12:00:00
-parse_datetime	todo	-2 days hence	2026-01-15T12:00:00	2026-01-13T12:00:00
-parse_datetime	todo	next week hence	2026-01-15T12:00:00	2026-01-22T12:00:00
-parse_datetime	todo	0 hours hence	2026-01-15T12:00:00	2026-01-15T12:00:00
-parse_datetime	todo	2 months HENCE	2026-01-15T12:00:00	2026-03-15T12:00:00
+parse_datetime	pass	wed.	2023-02-28T10:12:03	2023-03-01T00:00:00
+parse_datetime	pass	thu.	2023-02-28T10:12:03	2023-03-02T00:00:00
+parse_datetime	pass	fri.	2023-02-28T10:12:03	2023-03-03T00:00:00
+parse_datetime	pass	sat.	2023-02-28T10:12:03	2023-03-04T00:00:00
+parse_datetime	pass	sun.	2023-02-28T10:12:03	2023-03-05T00:00:00
+parse_datetime	pass	wed., 2024-01-03	2024-01-01T00:00:00	2024-01-03T00:00:00
+parse_datetime	pass	mon., 2024-01-03	2024-01-01T00:00:00	2024-01-03T00:00:00
+parse_datetime	pass	2 months hence	2026-01-15T12:00:00	2026-03-15T12:00:00
+parse_datetime	pass	year hence	2026-01-15T12:00:00	2027-01-15T12:00:00
+parse_datetime	pass	-2 days hence	2026-01-15T12:00:00	2026-01-13T12:00:00
+parse_datetime	pass	next week hence	2026-01-15T12:00:00	2026-01-22T12:00:00
+parse_datetime	pass	0 hours hence	2026-01-15T12:00:00	2026-01-15T12:00:00
+parse_datetime	pass	2 months HENCE	2026-01-15T12:00:00	2026-03-15T12:00:00
 parse_datetime	todo	2024-01-31 + 1 month	2024-01-01T00:00:00	2024-03-02T00:00:00
-parse_datetime	todo	@1690466034	2024-01-01T00:00:00	2023-07-27T13:53:54
-parse_datetime	todo	@0	2024-01-01T00:00:00	1970-01-01T00:00:00
-parse_datetime	todo	@-1	2024-01-01T00:00:00	1969-12-31T23:59:59
-parse_datetime	todo	@ 1234567890	2024-01-01T00:00:00	2009-02-13T23:31:30
-parse_datetime	todo	@ -1234567890	2024-01-01T00:00:00	1930-11-18T00:28:30
-parse_datetime	todo	@ - 1234567890	2024-01-01T00:00:00	1930-11-18T00:28:30
-parse_datetime	todo	@1	2024-01-01T00:00:00	1970-01-01T00:00:01
-parse_datetime	todo	@2	2024-01-01T00:00:00	1970-01-01T00:00:02
-parse_datetime	todo	@-2	2024-01-01T00:00:00	1969-12-31T23:59:58
-parse_datetime	todo	@10	2024-01-01T00:00:00	1970-01-01T00:00:10
-parse_datetime	todo	@-10	2024-01-01T00:00:00	1969-12-31T23:59:50
-parse_datetime	todo	@100	2024-01-01T00:00:00	1970-01-01T00:01:40
-parse_datetime	todo	@-100	2024-01-01T00:00:00	1969-12-31T23:58:20
-parse_datetime	todo	@150	2024-01-01T00:00:00	1970-01-01T00:02:30
-parse_datetime	todo	@-150	2024-01-01T00:00:00	1969-12-31T23:57:30
-parse_datetime	todo	@2000	2024-01-01T00:00:00	1970-01-01T00:33:20
-parse_datetime	todo	@-2000	2024-01-01T00:00:00	1969-12-31T23:26:40
-parse_datetime	todo	@1234400000	2024-01-01T00:00:00	2009-02-12T00:53:20
-parse_datetime	todo	@-1234400000	2024-01-01T00:00:00	1930-11-19T23:06:40
-parse_datetime	todo	@1334400000	2024-01-01T00:00:00	2012-04-14T10:40:00
-parse_datetime	todo	@-1334400000	2024-01-01T00:00:00	1927-09-19T13:20:00
-parse_datetime	todo	@1692582913	2024-01-01T00:00:00	2023-08-21T01:55:13
-parse_datetime	todo	@-1692582913	2024-01-01T00:00:00	1916-05-13T22:04:47
-parse_datetime	todo	@2092582910	2024-01-01T00:00:00	2036-04-23T17:01:50
-parse_datetime	todo	@-2092582910	2024-01-01T00:00:00	1903-09-10T06:58:10
+parse_datetime	pass	@1690466034	2024-01-01T00:00:00	2023-07-27T13:53:54
+parse_datetime	pass	@0	2024-01-01T00:00:00	1970-01-01T00:00:00
+parse_datetime	pass	@-1	2024-01-01T00:00:00	1969-12-31T23:59:59
+parse_datetime	pass	@ 1234567890	2024-01-01T00:00:00	2009-02-13T23:31:30
+parse_datetime	pass	@ -1234567890	2024-01-01T00:00:00	1930-11-18T00:28:30
+parse_datetime	pass	@ - 1234567890	2024-01-01T00:00:00	1930-11-18T00:28:30
+parse_datetime	pass	@1	2024-01-01T00:00:00	1970-01-01T00:00:01
+parse_datetime	pass	@2	2024-01-01T00:00:00	1970-01-01T00:00:02
+parse_datetime	pass	@-2	2024-01-01T00:00:00	1969-12-31T23:59:58
+parse_datetime	pass	@10	2024-01-01T00:00:00	1970-01-01T00:00:10
+parse_datetime	pass	@-10	2024-01-01T00:00:00	1969-12-31T23:59:50
+parse_datetime	pass	@100	2024-01-01T00:00:00	1970-01-01T00:01:40
+parse_datetime	pass	@-100	2024-01-01T00:00:00	1969-12-31T23:58:20
+parse_datetime	pass	@150	2024-01-01T00:00:00	1970-01-01T00:02:30
+parse_datetime	pass	@-150	2024-01-01T00:00:00	1969-12-31T23:57:30
+parse_datetime	pass	@2000	2024-01-01T00:00:00	1970-01-01T00:33:20
+parse_datetime	pass	@-2000	2024-01-01T00:00:00	1969-12-31T23:26:40
+parse_datetime	pass	@1234400000	2024-01-01T00:00:00	2009-02-12T00:53:20
+parse_datetime	pass	@-1234400000	2024-01-01T00:00:00	1930-11-19T23:06:40
+parse_datetime	pass	@1334400000	2024-01-01T00:00:00	2012-04-14T10:40:00
+parse_datetime	pass	@-1334400000	2024-01-01T00:00:00	1927-09-19T13:20:00
+parse_datetime	pass	@1692582913	2024-01-01T00:00:00	2023-08-21T01:55:13
+parse_datetime	pass	@-1692582913	2024-01-01T00:00:00	1916-05-13T22:04:47
+parse_datetime	pass	@2092582910	2024-01-01T00:00:00	2036-04-23T17:01:50
+parse_datetime	pass	@-2092582910	2024-01-01T00:00:00	1903-09-10T06:58:10
 parse_datetime	todo	2022-10-10  (A comment!) t   10:10:55	2024-01-01T00:00:00	2022-10-10T10:10:55
 parse_datetime	todo	2022-10-10  (A comment!)   10:10:55	2024-01-01T00:00:00	2022-10-10T10:10:55
-parse_datetime	todo	this wed	2025-01-01T00:00:00	2025-01-01T00:00:00
-parse_datetime	todo	this thu	2025-01-01T00:00:00	2025-01-02T00:00:00
+parse_datetime	pass	this wed	2025-01-01T00:00:00	2025-01-01T00:00:00
+parse_datetime	pass	this thu	2025-01-01T00:00:00	2025-01-02T00:00:00
 parse_datetime	todo	1 wed	2025-01-01T00:00:00	2025-01-08T00:00:00
 parse_datetime	todo	1 thu	2025-01-01T00:00:00	2025-01-02T00:00:00
 parse_datetime	todo	2 wed	2025-01-01T00:00:00	2025-01-15T00:00:00
 parse_datetime	todo	2 thu	2025-01-01T00:00:00	2025-01-09T00:00:00
 parse_datetime	todo	2 days 3 days ago	2024-01-01T10:20:30	2023-12-31T10:20:30
-parse_datetime	todo	UTC +8 years	2000-01-01T12:00:00	2008-01-01T12:00:00
+parse_datetime	pass	UTC +8 years	2000-01-01T12:00:00	2008-01-01T12:00:00
 parse_datetime	todo	1997-01-01 (foo) 10:00	2000-06-15T12:34:56	1997-01-01T10:00:00
 parse_datetime	todo	1997-01-01 (a (b)) 10:00	2000-06-15T12:34:56	1997-01-01T10:00:00
 parse_datetime	todo	(foo) 1997-01-01	2000-06-15T12:34:56	1997-01-01T00:00:00
 parse_datetime	todo	+ (c) 1997-01-01	2000-06-15T12:34:56	1997-01-01T00:00:00
 parse_datetime	todo	- (c) 1997-01-01	2000-06-15T12:34:56	1997-01-01T00:00:00
 parse_datetime	todo	1997-01-01 (x) + 1 day	2000-06-15T12:34:56	1997-01-02T00:00:00
-parse_datetime	todo	TZ="Europe/Paris" 2025-01-02	2024-01-01T00:00:00	2025-01-01T23:00:00
-parse_datetime	todo	TZ="Europe/Paris" 2025-01-02 03:04:05	2024-01-01T00:00:00	2025-01-02T02:04:05
-parse_datetime	todo	14-nov2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	november-14-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	TZ="Europe/Paris" 2025-01-02	2024-01-01T00:00:00	2025-01-01T23:00:00
+parse_datetime	pass	TZ="Europe/Paris" 2025-01-02 03:04:05	2024-01-01T00:00:00	2025-01-02T02:04:05
+parse_datetime	pass	14-nov2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	november-14-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
 parse_datetime	todo	november----14----2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	november  -  14   -  2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	nov-14-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	november  -  14   -  2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	nov-14-2022	2024-01-01T00:00:00	2022-11-14T00:00:00
 parse_datetime	todo	nov---14---2022	2024-01-01T00:00:00	2022-11-14T00:00:00
-parse_datetime	todo	nov  -   14    -   2022	2024-01-01T00:00:00	2022-11-14T00:00:00
+parse_datetime	pass	nov  -   14    -   2022	2024-01-01T00:00:00	2022-11-14T00:00:00
 parse_datetime	todo	22(comment 1)-11(comment 2)-14	2024-01-01T00:00:00	2022-11-14T00:00:00
 parse_datetime	todo	2022---11----14	2024-01-01T00:00:00	2022-11-14T00:00:00
 parse_datetime	todo	11--/14--/2022	2024-01-01T00:00:00	2022-11-14T00:00:00
@@ -1711,41 +1711,41 @@ parse_datetime	todo	20: (A comment!)   02 (Another comment!)  :00	2024-01-01T00:
 parse_datetime	todo	11 - am	2024-01-01T00:00:00	2024-01-01T11:00:00
 parse_datetime	todo	11 + am	2024-01-01T00:00:00	2024-01-01T11:00:00
 parse_datetime	todo	12 (A comment!) pm	2024-01-01T00:00:00	2024-01-01T12:00:00
-parse_datetime	todo	utc+5:30	2024-01-01T00:00:00	2023-12-31T18:30:00
-parse_datetime	todo	utc-5:30	2024-01-01T00:00:00	2024-01-01T05:30:00
-parse_datetime	todo	utc +5:30	2024-01-01T00:00:00	2023-12-31T18:30:00
-parse_datetime	todo	utc + 5 : 30	2024-01-01T00:00:00	2023-12-31T18:30:00
+parse_datetime	pass	utc+5:30	2024-01-01T00:00:00	2023-12-31T18:30:00
+parse_datetime	pass	utc-5:30	2024-01-01T00:00:00	2024-01-01T05:30:00
+parse_datetime	pass	utc +5:30	2024-01-01T00:00:00	2023-12-31T18:30:00
+parse_datetime	pass	utc + 5 : 30	2024-01-01T00:00:00	2023-12-31T18:30:00
 parse_datetime	todo	a+5:30	2024-01-01T00:00:00	2023-12-31T17:30:00
 parse_datetime	todo	a-5:30	2024-01-01T00:00:00	2024-01-01T04:30:00
 parse_datetime	todo	n-5:30	2024-01-01T00:00:00	2024-01-01T06:30:00
 parse_datetime	todo	n+5:30	2024-01-01T00:00:00	2023-12-31T19:30:00
 parse_datetime	todo	m+24	2024-01-01T00:00:00	2023-12-30T12:00:00
 parse_datetime	todo	y-24	2024-01-01T00:00:00	2024-01-02T12:00:00
-parse_datetime	todo	west	2024-01-01T00:00:00	2023-12-31T23:00:00
-parse_datetime	todo	cst	2024-01-01T00:00:00	2024-01-01T06:00:00
-parse_datetime	todo	ist	2024-01-01T00:00:00	2023-12-31T18:30:00
-parse_datetime	todo	nst	2024-01-01T00:00:00	2024-01-01T03:30:00
-parse_datetime	todo	mez	2024-01-01T00:00:00	2023-12-31T23:00:00
-parse_datetime	todo	mesz	2024-01-01T00:00:00	2023-12-31T22:00:00
-parse_datetime	todo	mest	2024-01-01T00:00:00	2023-12-31T22:00:00
-parse_datetime	todo	kst	2024-01-01T00:00:00	2023-12-31T15:00:00
-parse_datetime	todo	utc +8	2024-01-01T00:00:00	2023-12-31T16:00:00
-parse_datetime	todo	second ago	2024-01-01T00:00:00	2023-12-31T23:59:59
+parse_datetime	pass	west	2024-01-01T00:00:00	2023-12-31T23:00:00
+parse_datetime	pass	cst	2024-01-01T00:00:00	2024-01-01T06:00:00
+parse_datetime	pass	ist	2024-01-01T00:00:00	2023-12-31T18:30:00
+parse_datetime	pass	nst	2024-01-01T00:00:00	2024-01-01T03:30:00
+parse_datetime	pass	mez	2024-01-01T00:00:00	2023-12-31T23:00:00
+parse_datetime	pass	mesz	2024-01-01T00:00:00	2023-12-31T22:00:00
+parse_datetime	pass	mest	2024-01-01T00:00:00	2023-12-31T22:00:00
+parse_datetime	pass	kst	2024-01-01T00:00:00	2023-12-31T15:00:00
+parse_datetime	pass	utc +8	2024-01-01T00:00:00	2023-12-31T16:00:00
+parse_datetime	pass	second ago	2024-01-01T00:00:00	2023-12-31T23:59:59
 parse_datetime	todo	- 10 minutes ago	2024-01-01T00:00:00	2024-01-01T00:10:00
 parse_datetime	todo	-10 hours ago	2024-01-01T00:00:00	2024-01-01T10:00:00
 parse_datetime	todo	- 10 days ago	2024-01-01T00:00:00	2024-01-11T00:00:00
-parse_datetime	todo	fortnight	2024-01-01T00:00:00	2024-01-15T00:00:00
-parse_datetime	todo	2 fortnights ago	2024-01-01T00:00:00	2023-12-04T00:00:00
-parse_datetime	todo	this day	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	this year	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	next week ago	2024-01-01T00:00:00	2023-12-25T00:00:00
-parse_datetime	todo	last week ago	2024-01-01T00:00:00	2024-01-08T00:00:00
-parse_datetime	todo	this week ago	2024-01-01T00:00:00	2024-01-01T00:00:00
-parse_datetime	todo	mon.	2025-01-01T00:00:00	2025-01-06T00:00:00
+parse_datetime	pass	fortnight	2024-01-01T00:00:00	2024-01-15T00:00:00
+parse_datetime	pass	2 fortnights ago	2024-01-01T00:00:00	2023-12-04T00:00:00
+parse_datetime	pass	this day	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	this year	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	next week ago	2024-01-01T00:00:00	2023-12-25T00:00:00
+parse_datetime	pass	last week ago	2024-01-01T00:00:00	2024-01-08T00:00:00
+parse_datetime	pass	this week ago	2024-01-01T00:00:00	2024-01-01T00:00:00
+parse_datetime	pass	mon.	2025-01-01T00:00:00	2025-01-06T00:00:00
 parse_datetime	todo	this monday	2025-01-01T00:00:00	2025-01-06T00:00:00
 parse_datetime	todo	this - monday	2025-01-01T00:00:00	2025-01-06T00:00:00
-parse_datetime	todo	next tue.	2025-01-01T00:00:00	2025-01-07T00:00:00
-parse_datetime	todo	last wed.	2025-01-01T00:00:00	2024-12-25T00:00:00
+parse_datetime	pass	next tue.	2025-01-01T00:00:00	2025-01-07T00:00:00
+parse_datetime	pass	last wed.	2025-01-01T00:00:00	2024-12-25T00:00:00
 relative-time-expression	todo	now-w/w+2d\d	2024-01-01T00:00:00	2023-12-26T23:59:59
 relative-time-expression	todo	now-d/d	2024-01-01T00:00:00	2023-12-31T00:00:00
 relative-time-expression	todo	now/d	2024-01-01T00:00:00	2024-01-01T00:00:00
@@ -1757,18 +1757,18 @@ relative-time-expression	todo	now / d	2024-01-01T00:00:00	2024-01-01T00:00:00
 relative-time-expression	todo	now \ w	2024-01-01T00:00:00	2024-01-06T23:59:59
 relative-time-expression	todo	now - w / w	2024-01-01T00:00:00	2023-12-24T00:00:00
 relative-time-expression	todo	+M\M	2024-01-01T00:00:00	2024-02-29T23:59:59
-relative.time.parser	todo	-2Q	2024-01-01T00:00:00	2023-07-01T00:00:00
-relative.time.parser	todo	-2Qr	2024-01-01T00:00:00	2023-07-01T00:00:00
-relative.time.parser	todo	-2qr	2024-01-01T00:00:00	2023-07-01T00:00:00
-relative.time.parser	todo	-2yrs	2024-01-01T00:00:00	2022-01-01T00:00:00
+relative.time.parser	pass	-2Q	2024-01-01T00:00:00	2023-07-01T00:00:00
+relative.time.parser	pass	-2Qr	2024-01-01T00:00:00	2023-07-01T00:00:00
+relative.time.parser	pass	-2qr	2024-01-01T00:00:00	2023-07-01T00:00:00
+relative.time.parser	pass	-2yrs	2024-01-01T00:00:00	2022-01-01T00:00:00
 relative.time.parser	todo	+3M	2024-01-01T00:00:00	2024-04-01T00:00:00
-relative.time.parser	todo	+3Q	2024-01-01T00:00:00	2024-10-01T00:00:00
-relative.time.parser	todo	+3q	2024-01-01T00:00:00	2024-10-01T00:00:00
-relative.time.parser	todo	+3Qr	2024-01-01T00:00:00	2024-10-01T00:00:00
+relative.time.parser	pass	+3Q	2024-01-01T00:00:00	2024-10-01T00:00:00
+relative.time.parser	pass	+3q	2024-01-01T00:00:00	2024-10-01T00:00:00
+relative.time.parser	pass	+3Qr	2024-01-01T00:00:00	2024-10-01T00:00:00
 relative.time.parser	todo	not-valid	2024-01-01T00:00:00	2024-01-01T00:00:00
 risboo-when	todo	if I will finish this project in the hlf of yar	2018-08-03T15:34:56	2019-02-03T15:34:00
 risboo-when	todo	Call me next mnday at 6P.m.	2018-08-03T15:34:56	2018-08-06T18:00:00
-risboo-when	todo	at Saturday afternoon	2018-08-03T15:34:56	2018-08-04T15:00:00
+risboo-when	pass	at Saturday afternoon	2018-08-03T15:34:56	2018-08-04T15:00:00
 risboo-when	todo	drop me a line next wednesday at 2:25 p.m	2018-08-03T15:34:56	2018-08-08T14:25:00
 risboo-when	todo	12 p.	2019-01-01T00:00:00	2019-01-01T00:00:00
 risboo-when	todo	12 a.	2019-01-01T00:00:00	2019-01-01T12:00:00
@@ -1779,21 +1779,21 @@ risboo-when	todo	we did something 10 days ago.	2019-01-01T00:00:01	2018-12-22T00
 risboo-when	todo	we did something five days ago.	2019-01-01T00:00:01	2018-12-27T00:00:01
 risboo-when	todo	5 seconds ago a car was moved	2019-01-01T00:00:01	2018-12-31T23:59:56
 risboo-when	todo	two weks ago	2019-01-01T00:00:01	2018-12-18T00:00:01
-risboo-when	todo	20/12/2010	2019-01-01T00:00:00	2010-12-20T00:00:00
-risboo-when	todo	in the few days	2019-01-01T00:00:01	2019-01-04T00:00:01
+risboo-when	pass	20/12/2010	2019-01-01T00:00:00	2010-12-20T00:00:00
+risboo-when	pass	in the few days	2019-01-01T00:00:01	2019-01-04T00:00:01
 risboo-when	todo	in 5 minutes I will go home	2019-01-01T00:00:01	2019-01-01T00:05:01
 risboo-when	todo	we have to do something within 10 days.	2019-01-01T00:00:01	2019-01-11T00:00:01
 risboo-when	todo	we have to do something within five days.	2019-01-01T00:00:01	2019-01-06T00:00:01
 risboo-when	todo	drop me a line in a half hour	2019-01-01T00:00:01	2019-01-01T00:30:01
 risboo-when	todo	if will finish this project in the hlf of mnth	2019-01-01T00:00:01	2019-01-15T00:00:01
 risboo-when	todo	if will finish this project in hlf of mnth	2019-01-01T00:00:01	2019-01-15T00:00:01
-risboo-when	todo	tonight	2019-01-01T00:00:00	2019-01-01T23:00:00
-risboo-when	todo	tomorrow evening	2019-01-01T00:00:00	2019-01-02T18:00:00
+risboo-when	pass	tonight	2019-01-01T00:00:00	2019-01-01T23:00:00
+risboo-when	pass	tomorrow evening	2019-01-01T00:00:00	2019-01-02T18:00:00
 risboo-when	todo	yesterday morning	2019-01-01T00:00:00	2018-12-31T08:00:00
-risboo-when	todo	last night	2019-01-01T00:00:00	2018-12-31T23:00:00
-risboo-when	todo	next evening	2019-01-01T00:00:00	2019-01-02T18:00:00
-risboo-when	todo	thirteen of february	2019-01-01T00:00:00	2019-02-13T00:00:00
-risboo-when	todo	feb. 4	2019-01-01T00:00:00	2019-02-04T00:00:00
+risboo-when	pass	last night	2019-01-01T00:00:00	2018-12-31T23:00:00
+risboo-when	pass	next evening	2019-01-01T00:00:00	2019-01-02T18:00:00
+risboo-when	pass	thirteen of february	2019-01-01T00:00:00	2019-02-13T00:00:00
+risboo-when	pass	feb. 4	2019-01-01T00:00:00	2019-02-04T00:00:00
 risboo-when	todo	past Monday	2019-01-01T00:00:01	2018-12-31T00:00:01
 risboo-when	todo	past saturday	2019-01-01T00:00:01	2018-12-29T00:00:01
 risboo-when	todo	pst frday	2019-01-01T00:00:01	2018-12-28T00:00:01
@@ -1803,7 +1803,7 @@ risboo-when	todo	past tuesday	2019-01-01T00:00:01	2018-12-25T00:00:01
 risboo-when	todo	lst monday	2019-01-01T00:00:01	2018-12-31T00:00:01
 risboo-when	todo	this friday	2019-01-01T00:00:01	2019-01-04T00:00:01
 timestring	todo	1mth	2024-01-01T00:00:00	2024-01-31T10:30:00
-timestring	todo	7 hrs	2024-01-01T00:00:00	2024-01-01T07:00:00
+timestring	pass	7 hrs	2024-01-01T00:00:00	2024-01-01T07:00:00
 timestring	todo	9 mth	2024-01-01T00:00:00	2024-09-30T22:30:00
 timestring	todo	9 mths	2024-01-01T00:00:00	2024-09-30T22:30:00
 timestring	todo	1 yrs	2024-01-01T00:00:00	2024-12-31T06:00:00

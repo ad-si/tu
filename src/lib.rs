@@ -1,4 +1,4 @@
-use chrono::prelude::{DateTime, Utc};
+use chrono::prelude::{DateTime, FixedOffset, TimeZone, Utc};
 
 mod chrono_english {
   pub mod errors;
@@ -48,13 +48,101 @@ fn strip_prefix_ignore_case<'a>(s: &'a str, prefix: &str) -> Option<&'a str> {
     .map(|_| &s[prefix.len()..])
 }
 
+/// Parse a Unix timestamp like "@1690466034", "@-1", or "@ - 1234567890"
+fn parse_at_timestamp(input: &str) -> Option<Result<DateTime<Utc>, DateError>> {
+  let rest = input.strip_prefix('@')?.trim_start();
+  let (negative, digits) = match rest.strip_prefix('-') {
+    Some(digits) => (true, digits.trim_start()),
+    None => (false, rest.strip_prefix('+').unwrap_or(rest).trim_start()),
+  };
+  if digits.is_empty() || !digits.chars().all(|c| c.is_ascii_digit()) {
+    return Some(Err(date_error(format!("invalid timestamp '{input}'"))));
+  }
+  let seconds = digits
+    .parse::<i64>()
+    .ok()
+    .map(|secs| if negative { -secs } else { secs })
+    .and_then(|secs| DateTime::from_timestamp(secs, 0));
+  Some(seconds.ok_or_else(|| date_error("timestamp out of range")))
+}
+
+/// Timezone of a `TZ="…"` prefix (e.g. "Europe/Paris", "UTC0", "EST5")
+enum LocalZone {
+  Region(chrono_tz::Tz),
+  Fixed(FixedOffset),
+}
+
+impl LocalZone {
+  fn from_name(name: &str) -> Option<LocalZone> {
+    if let Ok(tz) = name.parse::<chrono_tz::Tz>() {
+      return Some(LocalZone::Region(tz));
+    }
+    // POSIX timezone with a standard offset (e.g. "EST5", "UTC0", "XYZ-5:30")
+    // Its sign is inverted: "EST5" is 5 hours behind UTC.
+    let abbrev_end = name
+      .find(|c: char| !c.is_ascii_alphabetic())
+      .filter(|&end| end >= 3)?;
+    let offset = &name[abbrev_end..];
+    let (sign, offset) = match offset.strip_prefix('-') {
+      Some(rest) => (1, rest),
+      None => (-1, offset.strip_prefix('+').unwrap_or(offset)),
+    };
+    let (hours, minutes) = offset.split_once(':').unwrap_or((offset, "0"));
+    let hours = hours.parse::<i32>().ok().filter(|h| *h <= 24)?;
+    let minutes = minutes.parse::<i32>().ok().filter(|m| *m < 60)?;
+    FixedOffset::east_opt(sign * (hours * 3600 + minutes * 60))
+      .map(LocalZone::Fixed)
+  }
+}
+
+/// Split off a `TZ="…"` prefix, which sets the timezone of the expression
+fn split_tz_prefix(
+  input: &str,
+) -> Result<(Option<LocalZone>, &str), DateError> {
+  let Some(rest) = input.strip_prefix("TZ=") else {
+    return Ok((None, input));
+  };
+  let (name, rest) = match rest.strip_prefix('"') {
+    Some(quoted) => quoted
+      .split_once('"')
+      .ok_or_else(|| date_error("unterminated TZ value"))?,
+    None => rest.split_once(' ').unwrap_or((rest, "")),
+  };
+  let zone = LocalZone::from_name(name)
+    .ok_or_else(|| date_error(format!("unknown timezone '{name}'")))?;
+  Ok((Some(zone), rest.trim()))
+}
+
 /// Parse date arguments and convert to UTC timestamp
 pub fn parse_date_args(
   args: &[String],
   now: DateTime<Utc>,
 ) -> Result<DateTime<Utc>, DateError> {
   let combined = args.join(" ");
-  let combined = combined.trim();
+  let (zone, combined) = split_tz_prefix(combined.trim())?;
+  match zone {
+    None => parse_in_zone(combined, now),
+    Some(LocalZone::Region(tz)) => {
+      parse_in_zone(combined, now.with_timezone(&tz))
+    }
+    Some(LocalZone::Fixed(offset)) => {
+      parse_in_zone(combined, now.with_timezone(&offset))
+    }
+  }
+}
+
+/// Parse a date string relative to `now`,
+/// whose timezone is used for dates and times without an explicit timezone
+fn parse_in_zone<Tz: TimeZone>(
+  combined: &str,
+  now: DateTime<Tz>,
+) -> Result<DateTime<Utc>, DateError>
+where
+  Tz::Offset: Copy,
+{
+  if let Some(result) = parse_at_timestamp(combined) {
+    return result;
+  }
 
   if let Some(rest) = strip_prefix_ignore_case(combined, "in ") {
     if rest.to_lowercase().ends_with(" ago") {
@@ -117,7 +205,10 @@ pub fn parse_date_args(
   DateTime::parse_from_rfc2822(&args_combined)
     .or_else(|_| DateTime::parse_from_rfc3339(&args_combined))
     .map(|datetime| datetime.with_timezone(&Utc))
-    .or_else(|_| parse_date_string(&args_combined, now, DIALECT))
+    .or_else(|_| {
+      parse_date_string(&args_combined, now, DIALECT)
+        .map(|datetime| datetime.with_timezone(&Utc))
+    })
 }
 
 pub fn to_iso(date: DateTime<Utc>) -> String {
